@@ -1,9 +1,8 @@
 import React, {useState, useEffect}  from 'react';
 import {Link} from 'react-router-dom';
 
+import Cards from './Cards';
 import movieService from '../services/movies';
-
-import '../App.css';
 
 function Home(){
 
@@ -15,19 +14,22 @@ function Home(){
         phase: 'loading'
     });
 
-
+    /*
+     * Haetaan uusimmat elokuvat palvelimelta
+     *
+     * - HUOM. Ny napataan talteen kolme ekaa...
+     */
     const fetchItems = async () => {
         movieService
             .getFrontPageMovies()
             .then(data => {
 
-                console.log(data);
 
                 const newItems = {
                     ...items,
                     phase: 'ready',
                     loading: false,
-                    movies: data
+                    movies: data.slice(0,3)
                 };
 
                 setItems(newItems);
@@ -67,17 +69,15 @@ console.log("............................");
                 return (<p>Ladataan</p>)
                 break;
             case 'ready':
-                return (<p>Aineisto valmis esitettäväksi</p>)
+                return <Cards frontPageMovies={items.movies}/>;
                 break;
             case 'error':
                 return (<p>Tapahtui virhe</p>)
                 break;               
             default:
             // code block
-            } 
-
+        } 
     }
-
 
     return(
         <div>

@@ -1,0 +1,21 @@
+.card {
+    width: 20rem!important;
+  }
+  
+  .card:hover {
+    box-shadow: 5px 10px 20px 1px rgba(0,0,0,0.253)!important;
+  }
+
+  .card-body {
+      padding: 3rem 0!important;
+  }
+
+  .card-text {
+      font-size: .9rem;
+      padding: 0.4rem 0.4rem;
+
+  }
+
+  .container-fluid .row {
+      padding-top: 2rem;
+  }
