@@ -1,25 +1,24 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import img1 from '../assets/bamse.jpg'
 import '../styles/cardStyles.css';
 
 
 const Card = ({id, nimi, kuva}) => {
 
+    const imgUrl = `http://www.tahtisadetta.fi/mongoDBImages/${kuva}`;
+
     return(
 
-        <div className="card text-center">
+        <div className="card text-center mb-3">
 
             <div className="overflow">
-                <img src={img1} alt="Dippaa daa" className="card-img-top" />
+                <img src={imgUrl} alt="Dippaa daa" className="card-img-top" />
             </div>
 
             <div className="card-body text-dark">
                 <h4 className="card-title">{nimi}</h4>
-                <p className="card-text text-secondary">
-                    Huikeeta settiä hei!
-                </p>
+
 
                 <Link to={`/elokuvat/${id}`}>Näytä tiedot</Link>
 

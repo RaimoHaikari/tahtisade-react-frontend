@@ -3,12 +3,11 @@ import axios from 'axios'
 const baseUrl = 'https://mighty-harbor-98163.herokuapp.com/'
 
 /*
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+ * Haetaan etusivulla esitettävä listaus uusimmista elokuvista
  */
 const getFrontPageMovies = () => {
 
-    const request = axios.get(`${baseUrl}api/movies`);
+    const request = axios.get(`${baseUrl}api/latestMovies`);
 
     return request.then(response => {
 

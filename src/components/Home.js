@@ -29,7 +29,7 @@ function Home(){
                     ...items,
                     phase: 'ready',
                     loading: false,
-                    movies: data.slice(0,3)
+                    movies: data
                 };
 
                 setItems(newItems);

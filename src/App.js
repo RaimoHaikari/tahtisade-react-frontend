@@ -13,6 +13,9 @@ import Elokuva from './components/Elokuva';
 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
+/*
+ * Auttasko jos tallettas
+ */
 class App extends Component {
 
   render() {

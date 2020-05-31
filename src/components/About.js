@@ -1,11 +1,14 @@
 import React from 'react';
 import '../App.css';
 
+// import DashboardLayout from "./../layouts/DashboardLayout";
+import Sivupohja from "../layout/sivupohja";
+
 function About(){
     return(
-        <div>
-            <h1>About Page</h1>
-        </div>
+        <Sivupohja>
+            Hei
+        </Sivupohja>
     )
 }
 
