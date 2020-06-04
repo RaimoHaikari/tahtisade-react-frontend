@@ -10,7 +10,7 @@ import Elokuvat from './components/Elokuvat';
 import Elokuva from './components/Elokuva';
 
 
-import Etusivu from './layout/FrontPage';
+import FrontPage from './layout/FrontPage';
 import Toolbar from './components/Toolbar/Toolbar';
 
 
@@ -52,7 +52,7 @@ class App extends Component {
           {backDrop}
           <main style={{marginTop: '110px'}}>
             <Switch>
-              <Route path="/" exact component={Etusivu} />
+              <Route path="/" exact component={FrontPage} />
               <Route path="/about" component={About} />
               <Route path="/elokuvat" exact component={Elokuvat} />
               <Route path="/elokuvat/:id" component={Elokuva} />

@@ -2,7 +2,6 @@ import React from 'react';
 
 import aikaJonkaSain from '../assets/aikaJonkaSain.jpg';
 import laBelleEpoque from '../assets/laBelleEpoque.jpg';
-import Home from '../components/Home';
 
 const MainContent = () => {
 
