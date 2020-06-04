@@ -5,30 +5,59 @@ import './App.css';
 // import './styles/cardStyles.css';
 
 import About from './components/About';
-import Nav from './components/Nav';
-//import Shop from './Shop';
-import Home from './components/Home';
+
 import Elokuvat from './components/Elokuvat';
 import Elokuva from './components/Elokuva';
 
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
-/*
- * Auttasko jos tallettas
- */
+import Etusivu from './layout/FrontPage';
+import Toolbar from './components/Toolbar/Toolbar';
+
+
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import SlideDrawer from './components/SlideDrawer/SlideDrawer';
+import Backdrop from './components/Backdrop/Backdrop';
+
+
 class App extends Component {
 
+  state = {
+    slideDrawerOpen: false
+  }
+
+  backdropClickHandler = () => {
+    this.setState({slideDrawerOpen: false})
+  }
+
+  drawerToggleClickHandler = () => {
+    this.setState((prevState) => {
+      return {slideDrawerOpen: !prevState.slideDrawerOpen}
+    })
+  }
+
   render() {
+
+    let backDrop;
+
+    if(this.state.slideDrawerOpen){
+      backDrop = <Backdrop click={this.backdropClickHandler}/>;
+    }
+
+
     return (
       <Router>
-        <div className="App">
-          <Nav />
-          <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/about" component={About} />
-            <Route path="/elokuvat" exact component={Elokuvat} />
-            <Route path="/elokuvat/:id" component={Elokuva} />
-          </Switch>
+        <div style={{height: '100%'}}>
+          <Toolbar drawerClickHandler={this.drawerToggleClickHandler} />
+          <SlideDrawer show={this.state.slideDrawerOpen}/>
+          {backDrop}
+          <main style={{marginTop: '110px'}}>
+            <Switch>
+              <Route path="/" exact component={Etusivu} />
+              <Route path="/about" component={About} />
+              <Route path="/elokuvat" exact component={Elokuvat} />
+              <Route path="/elokuvat/:id" component={Elokuva} />
+            </Switch>
+          </main>
         </div>
       </Router>
 

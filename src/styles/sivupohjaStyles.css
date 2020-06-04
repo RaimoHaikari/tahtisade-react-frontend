@@ -11,3 +11,26 @@
     font-size: xx-large;
 
 }
+
+.bcolor {
+    background-color: aliceblue;
+}
+
+.border-2 {
+    border: 1px dotted lightgray;
+    border-radius: 3px;
+    box-shadow: 0px 1px 2px black;
+}
+
+.border-bt {
+    border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
+}
+
+.black {
+    background-color: black;
+}
+
+.white {
+    color: white;
+}

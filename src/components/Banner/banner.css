@@ -1,0 +1,30 @@
+#banner {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background: rgba(0,0,0,0.2) url('/images/criticism-3083100_1920.jpg');
+	
+	background-size: cover;
+	background-attachment: fixed;	
+	background-position: center;
+	background-blend-mode: overlay;	
+	color: white;
+}
+
+h1 {
+	padding: 8px;
+	background: rgba(255,0,0,0.8);
+	border-radius: 8px;
+	margin: 0;
+	font-size: 64px;
+	font-family: 'Anton', sans-serif;
+}
+
+#banner h3 {
+	background: black;
+	border-radius: 8px;
+	padding: 0 24px;
+	font-size: 24px;
+}

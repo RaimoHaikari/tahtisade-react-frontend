@@ -1,24 +1,28 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 body {
-  background: radial-gradient(#e5e5e5, #ffffff, #e5e5e5);
+  /* background: radial-gradient(#e5e5e5, #ffffff, #e5e5e5); */
 }
 
 nav {
+  /*
   display: flex;
   justify-content: space-around;
   align-items: center;
   min-height: 10vh;
   background: darkgray;
   color: white;
+  */
 }
 
 .navLinks {
+  /*
   width: 40%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   list-style: none;
+  */
 }

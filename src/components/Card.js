@@ -3,14 +3,16 @@ import {Link} from 'react-router-dom';
 
 import '../styles/cardStyles.css';
 
+/*
 
+ */
 const Card = ({id, nimi, kuva}) => {
 
     const imgUrl = `http://www.tahtisadetta.fi/mongoDBImages/${kuva}`;
 
     return(
 
-        <div className="card text-center mb-3">
+        <div className="card text-center mb-3" style={{maxWidth: "12rem"}}>
 
             <div className="overflow">
                 <img src={imgUrl} alt="Dippaa daa" className="card-img-top" />

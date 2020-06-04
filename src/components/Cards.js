@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import Card from './Card';
+import FrontPageMovieCard from './FrontPageMovieCard/FrontPageMovieCard'
 
-const Cards = ({frontPageMovies}) => {
+/*
+        <div className="container-fluid">
 
-    return(
-        <div className="container-fluid d-flex justify-content-center">
-
-            <div className="row">
+            <div className="row justify-content-center">
                 {
                     frontPageMovies.map((movie, index) => {
                    
                         return(
-                            <div key={movie.id} className="col-md-4">
-                                <Card id={movie.id} nimi={movie.nimi} kuva={movie.img} />
+                            <div key={movie.id} className="col-auto mb-3">
+                                <Card key={movie.id} id={movie.id} nimi={movie.nimi} kuva={movie.img} />
                             </div>
                         )
                     })
@@ -20,6 +18,27 @@ const Cards = ({frontPageMovies}) => {
 
             </div>
         </div>
+ */
+/*
+<div className="card" key={movie.id}>
+  <div className="card-body">
+    This is some text within a card body.
+  </div>
+</div>
+*/
+const Cards = ({frontPageMovies}) => {
+
+    return(
+        <>
+            {
+                frontPageMovies.map((movie, index) => {
+                
+                    return(
+                        <FrontPageMovieCard key={movie.id} />
+                    )
+                })
+            }
+        </>
     )
 
 }

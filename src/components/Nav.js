@@ -16,11 +16,12 @@ function Nav(){
             </a>
 
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="navbar-nav">
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <div className="navbar-nav">
 
                 <Link to="/about">About</Link>
                 <Link to="/elokuvat">Elokuvat</Link>
+                <Link to="/etusivu">T Y Ö N  A L L A</Link>
 
                 </div>
             </div>
