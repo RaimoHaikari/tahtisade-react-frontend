@@ -6,7 +6,7 @@ import './App.css';
 
 import About from './components/About';
 
-import Elokuvat from './components/Elokuvat';
+import Movies from './layout/Movies';
 import Elokuva from './components/Elokuva';
 
 
@@ -54,7 +54,7 @@ class App extends Component {
             <Switch>
               <Route path="/" exact component={FrontPage} />
               <Route path="/about" component={About} />
-              <Route path="/elokuvat" exact component={Elokuvat} />
+              <Route path="/elokuvat" exact component={Movies} />
               <Route path="/elokuvat/:id" component={Elokuva} />
             </Switch>
           </main>
