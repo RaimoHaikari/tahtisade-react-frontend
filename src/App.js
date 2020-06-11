@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import './components/FontawesomeIcons';
+
 import './App.css';
 
 // import './styles/cardStyles.css';
@@ -39,6 +41,7 @@ class App extends Component {
 
     let backDrop;
 
+    
     if(this.state.slideDrawerOpen){
       backDrop = <Backdrop click={this.backdropClickHandler}/>;
     }

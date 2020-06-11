@@ -1,5 +1,8 @@
 import React, {useState, useEffect}  from 'react';
 
+import FrontPageMovieDetails from '../FrontPageMovieDetails';
+import Backdrop from '../Backdrop/Backdrop';
+
 import FrontPageMovieCard from '../FrontPageMovieCard/FrontPageMovieCard'
 import movieService from '../../services/movies';
 
@@ -15,8 +18,27 @@ const FrontPageMovies = (props) => {
         loading: true,
         movies: [],
         error: false,
-        phase: 'loading'
+        phase: 'loading',
+        showModal: false
     });
+
+    const backdropClickHandler = () => {
+        const newItems = {
+            ...items,
+            showModal: false
+        };
+
+        setItems(newItems); 
+    }
+
+    const iconClickHandler = () => {    
+        const newItems = {
+            ...items,
+            showModal: true
+        };
+
+        setItems(newItems); 
+    }
 
 
     /*
@@ -80,7 +102,7 @@ console.log("............................");
                 return (<p>Ladataan</p>)
                 break;
             case 'ready':
-                return printFrontPageMovieCards();
+                return printMovieCardsContainer();
                 break;
             case 'error':
                 return (<p>Tapahtui virhe</p>)
@@ -90,27 +112,56 @@ console.log("............................");
         } 
     }
 
+
+    const printMovieCardsContainer = () => {
+
+        return (
+            <div className="container fbContainer">
+
+                {items.showModal === true && <Backdrop click={backdropClickHandler}/>}
+                {items.showModal === true && <FrontPageMovieDetails title="Näkemiiin Neuvostoliitto" />}
+
+                <div className="row fbRow">
+                    {printFrontPageMovieCards(items.movies.slice(0,3))}
+                </div>
+                <div className="row fbRow">
+                    {printFrontPageMovieCards(items.movies.slice(3,6))}
+                </div>
+
+            </div>
+        )
+
+    }
+
     /*
      * Tulostetaan etusivulla näytettävät uusimpien elokuvien kuvakkeet
      */
-    const printFrontPageMovieCards = () => {
+    const printFrontPageMovieCards = (m) => {
+
         return(
-            items.movies.map((movie) => {
+            m.map((movie) => {
+
                 return (
+
                     <FrontPageMovieCard
+                        iconClick={iconClickHandler} 
                         kuva={movie.img} 
                         nimi={movie.nimi}
                         id={movie.googleID}
                         key={movie.id} 
+                        
                     />
                 )
+
             })
         )
     }
 
     return (
         <section>
-            { printContent() }
+
+                { printContent() }
+
         </section>
     );
 }
