@@ -12,6 +12,7 @@ const FrontPage = () => {
      */
     return (
         <>
+            <Banner />
             <FrontPageMovies />
         </>
     );

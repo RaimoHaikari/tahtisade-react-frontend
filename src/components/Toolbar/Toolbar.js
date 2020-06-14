@@ -2,11 +2,13 @@ import React from 'react';
 
 import {Link} from 'react-router-dom';
 // import tsLogo from '../assets/tahtisade-logo.svg';
+// import { ReactComponent as Logo } from '../../assets/tahtisade-logo.svg';
+
 
 //import '../components/SlideDrawer/DrawerToggleButton';
 import './toolbar.css';
 import DrawerToggleButton from '../SlideDrawer/DrawerToggleButton';
-
+import Logo from '../Logo'
 
 const Toolbar = (props) => {
 
@@ -16,7 +18,13 @@ const Toolbar = (props) => {
                 <div className="toolbarToggleButton">
                     <DrawerToggleButton click={props.drawerClickHandler} />
                 </div>
-                <div className="toolbarLogo"><a href="/">THE LOGO</a></div>
+
+                <div className="toolbarLogo">
+                    <a href="/">
+                        <Logo />
+                    </a>
+                </div>
+                
                 <div className="spacer" />
 
                 <div className="toolbarNavigationItems">

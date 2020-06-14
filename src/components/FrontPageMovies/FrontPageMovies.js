@@ -17,6 +17,7 @@ const FrontPageMovies = (props) => {
         message: '',
         loading: true,
         movies: [],
+        activeMovie: null,
         error: false,
         phase: 'loading',
         showModal: false
@@ -25,16 +26,19 @@ const FrontPageMovies = (props) => {
     const backdropClickHandler = () => {
         const newItems = {
             ...items,
-            showModal: false
+            showModal: false,
+            activeMovie: null
         };
 
         setItems(newItems); 
     }
 
-    const iconClickHandler = () => {    
+    const iconClickHandler = (googleID) => {    
+
         const newItems = {
             ...items,
-            showModal: true
+            showModal: true,
+            activeMovie: items.movies.filter(movie => movie.googleID === googleID)[0]
         };
 
         setItems(newItems); 
@@ -112,14 +116,20 @@ console.log("............................");
         } 
     }
 
-
+    /*
+     * - Kun showModal on true, on myös activeMovie asetettu
+     */
     const printMovieCardsContainer = () => {
 
         return (
             <div className="container fbContainer">
 
                 {items.showModal === true && <Backdrop click={backdropClickHandler}/>}
-                {items.showModal === true && <FrontPageMovieDetails title="Näkemiiin Neuvostoliitto" />}
+                {items.showModal === true && <FrontPageMovieDetails 
+                    title={items.activeMovie?items.activeMovie.nimi:''}
+                    ensiIlta={items.activeMovie?items.activeMovie.ensiIlta:''}
+                    />
+                }
 
                 <div className="row fbRow">
                     {printFrontPageMovieCards(items.movies.slice(0,3))}

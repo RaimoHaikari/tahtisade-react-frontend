@@ -46,21 +46,23 @@ class App extends Component {
       backDrop = <Backdrop click={this.backdropClickHandler}/>;
     }
 
-
+    /*
+     * main style: marginTop asetuksen tulee vastata .toolbar komponentin korkeutta
+     */
     return (
       <Router>
         <div style={{height: '100%'}}>
           <Toolbar drawerClickHandler={this.drawerToggleClickHandler} />
           <SlideDrawer show={this.state.slideDrawerOpen}/>
           {backDrop}
-          <main style={{marginTop: '110px'}}>
+          <div style={{marginTop: '100px'}}>
             <Switch>
               <Route path="/" exact component={FrontPage} />
               <Route path="/about" component={About} />
               <Route path="/elokuvat" exact component={Movies} />
               <Route path="/elokuvat/:id" component={Elokuva} />
             </Switch>
-          </main>
+          </div>
         </div>
       </Router>
 
