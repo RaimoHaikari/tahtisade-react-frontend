@@ -1,0 +1,96 @@
+.accordion_section {
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid red;
+}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    border: none;
+    outline: none;
+    transition: background-color 0.6s ease;
+}
+
+.accordion :hover {
+    background-color: #ccc;
+}
+
+.accordion_title {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.accordion_icon {
+    margin-left: auto;
+    transition: transform 0.6 ease;
+}
+
+.rotate {
+    transform: rotate(90deg);
+}
+
+.accordion_content {
+    background-color: white;
+    overflow: hidden;
+    transition: max-height 0.6s ease;
+    max-height: 100;
+}
+
+/*
+ * E R O T I N
+ */
+.accordion_content hr {
+    width: 50%;
+}
+
+/*
+ * P I K A V A L I N N A T
+ */
+ .actionBtnContainer {
+     /*
+    padding-top: 5px;
+    padding-left: 5px;
+    */
+    padding: 5px;
+ }
+
+ .gListBtn {
+    border: none;
+    background-color: inherit;
+    padding: 14px 14px;
+    font-size: 18px;
+    cursor: pointer;
+    display: inline-block;
+    width: 90%;
+    text-align: left;
+ }
+
+ /* On mouse-over */
+.gListBtn:hover {background: #eee;}
+
+/* P Ä I V I T Y S P A I N I K E */
+.block {
+    display: block;
+    width: 100%;
+    border: none;
+    background-color: #4CAF50;
+    padding: 14px 14px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+/* 
+ * G E N R E S
+ */
+ .gListContainer {
+     padding-top: 5px;
+     padding-left: 5px;
+ }

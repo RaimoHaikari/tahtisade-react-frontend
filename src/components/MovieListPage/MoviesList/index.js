@@ -1,7 +1,7 @@
 import React, {useState, useEffect}  from 'react';
 
-import MoviesPageMovieCard from '../MoviesPageMovieCard/MoviesPageMovieCard'
-import movieService from '../../services/movies';
+import MoviesPageMovieCard from '../MoviesPageMovieCard'
+import movieService from '../../../services/movies';
 
 
 import './movieList.css';
@@ -94,12 +94,20 @@ console.log("............................");
      */
     const printMoviesPageMovieCards = () => {
         return(
+
             items.movies.map((movie) => {
 
                 return (
-                    <MoviesPageMovieCard key={movie.id} />
+                    <MoviesPageMovieCard 
+                        key={movie.id} 
+                        nimi={movie.nimi} 
+                        kuva={movie.img} 
+                        ensiIlta={movie.ensiIlta} 
+                        id={movie.googleID}
+                    />
                 )
             })
+
         )
     }
 
@@ -108,7 +116,11 @@ console.log("............................");
      */
     return (
         <section>
-            { printContent() }
+            <div className="container">
+                <div className="row">
+                    { printContent() }
+                </div>
+            </div>
         </section>
     );
 }

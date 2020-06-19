@@ -19,12 +19,34 @@ const getFrontPageMovies = () => {
 }
 
 /*
+ * Haetaan luettelo elokuvien luokitteluissa käytetyistä genreistä
+ */
+const getGenreList = () => {
+    const request = axios.get(`${baseUrl}api/genres`);
+
+    return request.then(response => {
+
+        const x = response.data.map((r,i) => {
+            return {
+                name: r,
+                active: false,
+                id: i
+            }
+        })
+
+        console.log("- getGenreList status", response.status);
+
+        return x
+    })
+}
+
+/*
  * Haetaan kaikki kantaan tallennetut elokuvat
  * -https://mighty-harbor-98163.herokuapp.com/api/movies
  */
 const getMovieListing = () => {
 
-    const request = axios.get(`${baseUrl}api/movies`);
+    const request = axios.get(`${baseUrl}api/movies?include=general`);
 
     return request.then(response => {
 
@@ -35,6 +57,7 @@ const getMovieListing = () => {
 }
 
 export default { 
+    getGenreList,
     getFrontPageMovies,
     getMovieListing
 }
