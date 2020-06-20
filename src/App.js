@@ -8,7 +8,7 @@ import './App.css';
 
 import About from './components/About';
 
-import Movies from './layout/Movies';
+import Movies from './layout/Movies/Movies';
 import Elokuva from './components/Elokuva';
 
 

@@ -1,0 +1,29 @@
+/*
+ * w3schools.com
+ * CSS Pagination Examples
+ *
+ * https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_pagination_active_round
+ */
+
+.mListPagination {
+    display: inline-block;
+    border: 1px solid red;
+}
+  
+.mListPagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.mListPagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+.mListPagination a:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 5px;
+}

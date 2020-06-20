@@ -39,8 +39,8 @@ const SideToolbar = ({title, data, click, toggleClick, btnClick}) => {
             <div ref={content} style={{maxHeight: `${setHeight}`}} className="accordion_content">
 
                 <div className="actionBtnContainer">
-                    <button class="gListBtn" onClick={() => toggleClick(true)}>Valitse kaikki</button>
-                    <button class="gListBtn" onClick={() => toggleClick(false)}>Tyhjennä valinnat</button>
+                    <button className="gListBtn" onClick={() => toggleClick(true)}>Valitse kaikki</button>
+                    <button className="gListBtn" onClick={() => toggleClick(false)}>Tyhjennä valinnat</button>
                 </div>
 
                 <hr />
@@ -63,7 +63,7 @@ const SideToolbar = ({title, data, click, toggleClick, btnClick}) => {
                 <hr />
 
                 <div className="actionBtnContainer">
-                    <button onClick={() => btnClick()} type="button" class="block">Päivitä lista</button>
+                    <button onClick={() => btnClick()} type="button" className="block">Päivitä lista</button>
                 </div>               
 
             </div>

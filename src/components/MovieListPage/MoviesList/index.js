@@ -1,4 +1,4 @@
-import React, {useState, useEffect}  from 'react';
+import React  from 'react';
 
 import MoviesPageMovieCard from '../MoviesPageMovieCard'
 import movieService from '../../../services/movies';
@@ -6,74 +6,47 @@ import movieService from '../../../services/movies';
 
 import './movieList.css';
 
-const MovieList = () => {
-
-    const [items, setItems] = useState({
-        message: '',
-        loading: true,
-        movies: [],
-        error: false,
-        phase: 'loading'
-    });
-
-
+const MovieList = ({loadingPhase, movies}) => {
 
     /*
-     * Haetaan uusimmat elokuvat palvelimelta
-     *
-     * - HUOM. Ny napataan talteen kolme ekaa...
-     */
-    const fetchItems = async () => {
-        movieService
-            .getMovieListing()
-            .then(data => {
+    const getVisibleMovies = () => {
+        console.log("-----------------------")
+        console.log(genres);
+        console.log(movies);
+        console.log("......... A C T I V E .........,..")
 
+        const activeGenres =  genres
+            .filter(genre => genre.active === true)
+            .map(ac => ac.name)
 
-                const newItems = {
-                    ...items,
-                    phase: 'ready',
-                    loading: false,
-                    movies: data
-                };
+        console.log(activeGenres);
 
-                setItems(newItems);
+        console.log("------------ M O V I E S-----------")
 
-            })
-            .catch(err => {
+        const activeMovies = movies.filter((movies) => {
 
-console.log("......... e r r o r ........");
-console.log("statusText: ", err.response.statusText);
-console.log("error: ",err.response.data.error);
-console.log("............................");
+            const gList = movies.genre;
+            const found = gList.some(g => activeGenres.indexOf(g) >= 0)
+        
+        
+            return found;
+        
+        }) 
 
-                const newItems = {
-                    ...items,
-                    loading: false,
-                    phase: 'error',
-                    message: 'Aineiston lukeminen epäonnistui.',
-                    error: true
-                };
-
-                setItems(newItems);              
-            })
+        console.log(activeMovies);
     }
-    
-    /* 
-     * Ladataan etusivulla esitettävä aineisto palvelimelta
-     */
-    useEffect(() => {
-        fetchItems();
-    }, []);
+    */
 
    /*
      * Valitaan mitä tulostetaan riippuen siitä:
      * - ollaanko hakemassa aineistoa
      * - tulostamassa aineistoa
      * - tulostamassa virheilmoitusta 
+     * 
      */
     const printContent = () => {
 
-        switch(items.phase) {
+        switch(loadingPhase) {
 
             case 'loading':
                 return (<p>Ladataan</p>)
@@ -88,14 +61,16 @@ console.log("............................");
             // code block
         } 
     }
+    
 
     /*
      * Tulostetaan etusivulla näytettävät uusimpien elokuvien kuvakkeet
      */
     const printMoviesPageMovieCards = () => {
+
         return(
 
-            items.movies.map((movie) => {
+            movies.map((movie) => {
 
                 return (
                     <MoviesPageMovieCard 
@@ -112,13 +87,13 @@ console.log("............................");
     }
 
     /*
-     * 
+     *  
      */
     return (
         <section>
             <div className="container">
                 <div className="row">
-                    { printContent() }
+                { printContent() }
                 </div>
             </div>
         </section>

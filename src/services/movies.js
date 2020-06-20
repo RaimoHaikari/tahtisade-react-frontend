@@ -29,7 +29,7 @@ const getGenreList = () => {
         const x = response.data.map((r,i) => {
             return {
                 name: r,
-                active: false,
+                active: true,
                 id: i
             }
         })
