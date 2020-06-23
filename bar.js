@@ -1,322 +1,165 @@
-const movies = [
-    {
-      "googleID": 1,
-      "nimi": "Elämää kuoleman jälkeen",
-      "wiki": "",
-      "imdb": "tt10385556",
-      "kavi": "kavi.elonet_elokuva_1603238",
-      "img": "elamaaKuolemanJalkeen.jpg",
-      "ensiIlta": "2020-03-06T12:00:00.000Z",
-      "stars": [
-        4,
-        3,
-        3,
-        4
-      ],
-      "genre": [
-        "Drama"
-      ],
-      "id": "5ee62b717975e31594df28f4"
-    },
-    {
-      "googleID": 2,
-      "nimi": "Emma.",
-      "wiki": "Q65091224",
-      "imdb": "tt9214832",
-      "kavi": "kavi.elonet_elokuva_1613316",
-      "img": "emma.jpg",
-      "ensiIlta": "2020-03-06T00:00:00.000Z",
-      "stars": [
-        4,
-        3
-      ],
-      "genre": [
-        "Drama",
-        "Comedy"
-      ],
-      "id": "5ee66c04b8ecdc1778082e88"
-    },
-    {
-      "googleID": 3,
-      "nimi": "Bombshell",
-      "wiki": "",
-      "imdb": "tt6394270",
-      "kavi": "kavi.elonet_elokuva_1612336",
-      "img": "bombshell.jpg",
-      "ensiIlta": "2020-02-07T00:00:00.000Z",
-      "stars": [
-        3,
-        2,
-        3,
-        3,
-        3
-      ],
-      "genre": [
-        "Biography",
-        "Drama"
-      ],
-      "id": "5ee66c04b8ecdc1778082e89"
-    },
-    {
-      "googleID": 4,
-      "nimi": "Birds of Prey",
-      "wiki": "Q57177410",
-      "imdb": "tt7713068",
-      "kavi": "kavi.elonet_elokuva_1612337",
-      "img": "birdsOfPrey.jpg",
-      "ensiIlta": "2020-02-07T00:00:00.000Z",
-      "stars": [
-        2,
-        2,
-        3
-      ],
-      "genre": [
-        "Action",
-        "Adventure",
-        "Crime"
-      ],
-      "id": "5ee66c04b8ecdc1778082e8a"
-    },
-    {
-      "googleID": 5,
-      "nimi": "A Hidden Life",
-      "wiki": "Q27555348",
-      "imdb": "tt5827916",
-      "kavi": "kavi.elonet_elokuva_1612339",
-      "img": "aHiddenLife.jpg",
-      "ensiIlta": "2020-02-07T00:00:00.000Z",
-      "stars": [
-        4,
-        4,
-        4,
-        2
-      ],
-      "genre": [
-        "Biography",
-        "Drama",
-        "Romance"
-      ],
-      "id": "5ee66c8f9915f80c140c0a17"
-    },
-    {
-      "googleID": 6,
-      "nimi": "La Belle Époque",
-      "wiki": "Q63213666",
-      "imdb": "tt9172422",
-      "kavi": "kavi.elonet_elokuva_1613385",
-      "img": "laBelleEpoque.jpg",
-      "ensiIlta": "2020-03-13T00:00:00.000Z",
-      "stars": [
-        3,
-        3,
-        2,
-        3,
-        4,
-        5
-      ],
-      "genre": [
-        "Comedy",
-        "Drama",
-        "Romance"
-      ],
-      "id": "5ee66c8f9915f80c140c0a18"
-    },
-    {
-      "googleID": 7,
-      "nimi": "Weathering with You",
-      "wiki": "Q59692464",
-      "imdb": "tt9426210",
-      "kavi": "kavi.elonet_elokuva_1613384",
-      "img": "weatheringWithYou.jpg",
-      "ensiIlta": "2020-03-13T00:00:00.000Z",
-      "stars": [
-        3,
-        3,
-        4,
-        4,
-        3,
-        4
-      ],
-      "genre": [
-        "Animation",
-        "Drama",
-        "Family"
-      ],
-      "id": "5ee66c8f9915f80c140c0a19"
-    },
-    {
-      "googleID": 8,
-      "nimi": "Aika jonka sain",
-      "wiki": "",
-      "imdb": "tt9777796",
-      "kavi": "kavi.elonet_elokuva_1612002",
-      "img": "aikaJonkaSain.jpg",
-      "ensiIlta": "2020-03-13T00:00:00.000Z",
-      "stars": [
-        3,
-        3,
-        2,
-        2,
-        2,
-        4,
-        3
-      ],
-      "genre": [
-        "Drama"
-      ],
-      "id": "5ee66c8f9915f80c140c0a1a"
-    },
-    {
-      "googleID": 9,
-      "nimi": "Mr. Jones",
-      "wiki": "Q30963297",
-      "imdb": "tt6828390",
-      "kavi": "kavi.elonet_elokuva_1613383",
-      "img": "mrJones.jpg",
-      "ensiIlta": "2020-03-13T00:00:00.000Z",
-      "stars": [
-        4,
-        4,
-        4,
-        4,
-        3,
-        4,
-        3
-      ],
-      "genre": [
-        "Biography",
-        "Drama",
-        "Thriller"
-      ],
-      "id": "5ee66c8f9915f80c140c0a1b"
-    },
-    {
-      "googleID": 10,
-      "nimi": "The Cave",
-      "wiki": "Q81924220",
-      "imdb": "tt7178226",
-      "kavi": "kavi.elonet_elokuva_1613321",
-      "img": "theCave.jpg",
-      "ensiIlta": "2020-03-12T00:00:00.000Z",
-      "stars": [
-        5
-      ],
-      "genre": [
-        "Documentary",
-        "War"
-      ],
-      "id": "5ee66c8f9915f80c140c0a1c"
-    }
-  ]
+const genres = [
+  {
+    "genre": "Comedy",
+    "numberOfMovies": 20,
+    "numberOfReviews": 83,
+    "starsAverage": 3.036144578313253,
+    "id": 0
+  },
+  {
+    "genre": "Drama",
+    "numberOfMovies": 26,
+    "numberOfReviews": 138,
+    "starsAverage": 3.3731884057971016,
+    "id": 1
+  },
+  {
+    "genre": "Romance",
+    "numberOfMovies": 3,
+    "numberOfReviews": 19,
+    "starsAverage": 3.5,
+    "id": 2
+  },
+  {
+    "genre": "Animation",
+    "numberOfMovies": 5,
+    "numberOfReviews": 16,
+    "starsAverage": 2.9375,
+    "id": 3
+  },
+  {
+    "genre": "Family",
+    "numberOfMovies": 7,
+    "numberOfReviews": 26,
+    "starsAverage": 2.6923076923076925,
+    "id": 4
+  },
+  {
+    "genre": "Biography",
+    "numberOfMovies": 6,
+    "numberOfReviews": 28,
+    "starsAverage": 3.2857142857142856,
+    "id": 5
+  },
+  {
+    "genre": "Thriller",
+    "numberOfMovies": 3,
+    "numberOfReviews": 20,
+    "starsAverage": 4.15,
+    "id": 6
+  },
+  {
+    "genre": "History",
+    "numberOfMovies": 1,
+    "numberOfReviews": 1,
+    "starsAverage": 4,
+    "id": 7
+  },
+  {
+    "genre": "Action",
+    "numberOfMovies": 5,
+    "numberOfReviews": 22,
+    "starsAverage": 2.409090909090909,
+    "id": 8
+  },
+  {
+    "genre": "Adventure",
+    "numberOfMovies": 7,
+    "numberOfReviews": 19,
+    "starsAverage": 2.6315789473684212,
+    "id": 9
+  },
+  {
+    "genre": "Crime",
+    "numberOfMovies": 6,
+    "numberOfReviews": 30,
+    "starsAverage": 2.8666666666666667,
+    "id": 10
+  },
+  {
+    "genre": "Documentary",
+    "numberOfMovies": 3,
+    "numberOfReviews": 4,
+    "starsAverage": 4.25,
+    "id": 11
+  },
+  {
+    "genre": "War",
+    "numberOfMovies": 3,
+    "numberOfReviews": 17,
+    "starsAverage": 4,
+    "id": 12
+  },
+  {
+    "genre": "Sport",
+    "numberOfMovies": 1,
+    "numberOfReviews": 6,
+    "starsAverage": 3.3333333333333335,
+    "id": 13
+  },
+  {
+    "genre": "Horror",
+    "numberOfMovies": 3,
+    "numberOfReviews": 10,
+    "starsAverage": 3.1,
+    "id": 14
+  },
+  {
+    "genre": "Sci-Fi",
+    "numberOfMovies": 2,
+    "numberOfReviews": 8,
+    "starsAverage": 3.375,
+    "id": 15
+  },
+  {
+    "genre": "Mystery",
+    "numberOfMovies": 1,
+    "numberOfReviews": 4,
+    "starsAverage": 3.25,
+    "id": 16
+  }
+]
 
-  const genres = [
-    {
-      "name": "Action",
-      "active": false,
-      "id": 0
-    },
-    {
-      "name": "Adventure",
-      "active": false,
-      "id": 1
-    },
-    {
-      "name": "Animation",
-      "active": false,
-      "id": 2
-    },
-    {
-      "name": "Biography",
-      "active": true,
-      "id": 3
-    },
-    {
-      "name": "Comedy",
-      "active": true,
-      "id": 4
-    },
-    {
-      "name": "Crime",
-      "active": false,
-      "id": 5
-    },
-    {
-      "name": "Documentary",
-      "active": false,
-      "id": 6
-    },
-    {
-      "name": "Drama",
-      "active": false,
-      "id": 7
-    },
-    {
-      "name": "Family",
-      "active": false,
-      "id": 8
-    },
-    {
-      "name": "History",
-      "active": false,
-      "id": 9
-    },
-    {
-      "name": "Horror",
-      "active": false,
-      "id": 10
-    },
-    {
-      "name": "Mystery",
-      "active": false,
-      "id": 11
-    },
-    {
-      "name": "Romance",
-      "active": false,
-      "id": 12
-    },
-    {
-      "name": "Sci-Fi",
-      "active": false,
-      "id": 13
-    },
-    {
-      "name": "Sport",
-      "active": false,
-      "id": 14
-    },
-    {
-      "name": "Thriller",
-      "active": false,
-      "id": 15
-    },
-    {
-      "name": "War",
-      "active": false,
-      "id": 16
-    }
-  ]
+function compare( a, b ) {
 
-const activeGenres =  genres
-    .filter(genre => genre.active === true)
-    .map(ac => ac.name)
+  let byCol = 'genre'
 
-console.log(activeGenres)
-console.log(".................................")
+  if ( a[byCol] < b[byCol] ){
+    return -1;
+  }
+  if ( a[byCol] > b[byCol] ){
+    return 1;
+  }
+  return 0;
 
-// const found = arr1.some(r=> arr2.indexOf(r) >= 0)
-const b = movies.filter((movies) => {
+}
 
-    const gList = movies.genre;
-    const found = gList.some(g => activeGenres.indexOf(g) >= 0)
+var People = [
+  {Name: "Name", Surname: "Surname"},
+  {Name:"AAA", Surname:"ZZZ"},
+  {Name: "Name", Surname: "AAA"}
+];
 
-    console.log(gList);
-    console.log(found);
+function dynamicSort(property) {
+  
+  var sortOrder = 1;
 
-    console.log(" ........................................")
-
-    return false;
-
-}) 
+  if(property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
+  }
 
 
+  return function (a,b) {
+      /* next line works with strings and numbers, 
+       * and you may want to customize it to your needs
+       */
+      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+
+      return result * sortOrder;
+  }
+}
+
+//console.log(People.sort(dynamicSort("Name")))
+//console.log(People.sort(dynamicSort("Surname")));
+console.log(People.sort(dynamicSort("-Surname")));

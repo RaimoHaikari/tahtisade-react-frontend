@@ -8,34 +8,6 @@ import './movieList.css';
 
 const MovieList = ({loadingPhase, movies}) => {
 
-    /*
-    const getVisibleMovies = () => {
-        console.log("-----------------------")
-        console.log(genres);
-        console.log(movies);
-        console.log("......... A C T I V E .........,..")
-
-        const activeGenres =  genres
-            .filter(genre => genre.active === true)
-            .map(ac => ac.name)
-
-        console.log(activeGenres);
-
-        console.log("------------ M O V I E S-----------")
-
-        const activeMovies = movies.filter((movies) => {
-
-            const gList = movies.genre;
-            const found = gList.some(g => activeGenres.indexOf(g) >= 0)
-        
-        
-            return found;
-        
-        }) 
-
-        console.log(activeMovies);
-    }
-    */
 
    /*
      * Valitaan mitä tulostetaan riippuen siitä:

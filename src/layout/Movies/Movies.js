@@ -241,6 +241,7 @@ console.log("............................");
                 <div className="col-3 colMovies"></div>
                 <div className="col-9 colMovies">
                     <Pagination 
+                        currentPage={currentPage}
                         paginate={paginate}
                         moviesPerPage={moviesPerPage} 
                         totalMovies={filteredMovies.length} 

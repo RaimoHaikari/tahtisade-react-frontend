@@ -2,13 +2,19 @@ import React  from 'react';
 
 import './pagination.css';
 
-const Pagination = ({moviesPerPage, totalMovies, paginate}) => {
+const Pagination = ({moviesPerPage, totalMovies, paginate, currentPage}) => {
 
     let pageNumbers = [];
+
+ console.log("Auki sivu", currentPage)   
 
     for(let i = 1; i <= Math.ceil(totalMovies/moviesPerPage); i++){
         pageNumbers.push(i);
     }
+
+  
+
+
 
     /*
             <a href="#">&laquo;</a>
@@ -25,7 +31,14 @@ const Pagination = ({moviesPerPage, totalMovies, paginate}) => {
             {
                 pageNumbers.map(number => {
                    return(
-                    <a onClick={() => paginate(number)} key={number}>{number}</a>
+                    <a 
+                        className={number===currentPage && 'active'}
+                        href={void(0)} 
+                        onClick={() => paginate(number)} 
+                        key={number}
+                    >
+                        {number}
+                    </a>
                    )
                 })
             }

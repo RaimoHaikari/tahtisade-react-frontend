@@ -9,6 +9,7 @@ import './App.css';
 import About from './components/About';
 
 import Movies from './layout/Movies/Movies';
+import Genres from './layout/Genres'
 import Elokuva from './components/Elokuva';
 
 
@@ -61,6 +62,7 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/elokuvat" exact component={Movies} />
               <Route path="/elokuvat/:id" component={Elokuva} />
+              <Route path="/genret" exact component={Genres} />
             </Switch>
           </div>
         </div>

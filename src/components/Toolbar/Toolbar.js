@@ -32,6 +32,7 @@ const Toolbar = (props) => {
                     <ul>
                         <li><Link to="/about">About</Link></li>
                         <li><Link to="/elokuvat">Elokuvat</Link></li>
+                        <li><Link to="/genret">Genret</Link></li>
                     </ul>
                 </div>
 
