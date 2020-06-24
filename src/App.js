@@ -15,6 +15,7 @@ import Elokuva from './components/Elokuva';
 
 import FrontPage from './layout/FrontPage';
 import Toolbar from './components/Toolbar/Toolbar';
+import Navigation from './components/Navbar'
 
 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
@@ -49,13 +50,16 @@ class App extends Component {
 
     /*
      * main style: marginTop asetuksen tulee vastata .toolbar komponentin korkeutta
+
+          <Toolbar drawerClickHandler={this.drawerToggleClickHandler} />
+          <SlideDrawer show={this.state.slideDrawerOpen}/>
+          {backDrop}
+
      */
     return (
       <Router>
         <div style={{height: '100%'}}>
-          <Toolbar drawerClickHandler={this.drawerToggleClickHandler} />
-          <SlideDrawer show={this.state.slideDrawerOpen}/>
-          {backDrop}
+          <Navigation />
           <div style={{marginTop: '100px'}}>
             <Switch>
               <Route path="/" exact component={FrontPage} />

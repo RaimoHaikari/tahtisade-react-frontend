@@ -36,6 +36,7 @@ const Header = ({ headers, onSorting }) => {
                                     />
                                 )}
                             
+                            
                             </th>
                         )
                     })
