@@ -12,6 +12,8 @@ const Genres = () => {
     const [totalItems, setTotalItems] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [sorting, setSorting] = useState({field: "", order: ""})
+
 
     const ITEMS_PER_PAGE = 5;
 
@@ -49,12 +51,41 @@ const Genres = () => {
 
         setTotalItems(computedGenres.length)
 
+        // Lajittelu
+        if(sorting.field){
+
+            const reversed = sorting.order === "asc" ? 1 : -1;
+
+console.log("Lajittelu")
+console.log(sorting);
+console.log("---------------------------");
+
+            computedGenres = computedGenres.sort((a,b) => {
+
+                let val;
+
+                switch (sorting.field) {
+                    case "genre":
+                      val = reversed * a[sorting.field].localeCompare(b[sorting.field])
+                      break;
+                    default:
+                      val = reversed * (a[sorting.field] - b[sorting.field]);
+                  }
+
+                return(val)
+            })
+
+
+        }
+
         return computedGenres.slice(
             (currentPage - 1) * ITEMS_PER_PAGE,
             (currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
         );
 
-    }, [genres.genres, currentPage, search])
+    }, [genres.genres, currentPage, search, sorting])
+
+
 
 
     /*
@@ -130,6 +161,7 @@ const Genres = () => {
                     <table className="table table-striped">
 
                         <TableHeader 
+                            onSorting = {(field, order) => setSorting({field, order})}
                             headers={headers}
                         />
 
@@ -161,15 +193,5 @@ const Genres = () => {
     );
 }
 
-/*
-    const headers = [
-        { name: "No#", field: "id", sortable: false },
-        { name: "Nimi", field: "genre", sortable: true },
-        { name: "Keskiarvo", field: "numberOfMovies", sortable: true },
-        { name: "Elokuvien määrä", field: "numberOfReviews", sortable: false },
-        { name: "Arvostelujen määrä", field: "starsAverage", sortable: false }
-    ];
-
-*/
 
 export default Genres;
