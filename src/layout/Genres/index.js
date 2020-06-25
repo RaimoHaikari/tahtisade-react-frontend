@@ -56,10 +56,6 @@ const Genres = () => {
 
             const reversed = sorting.order === "asc" ? 1 : -1;
 
-console.log("Lajittelu")
-console.log(sorting);
-console.log("---------------------------");
-
             computedGenres = computedGenres.sort((a,b) => {
 
                 let val;
@@ -74,7 +70,6 @@ console.log("---------------------------");
 
                 return(val)
             })
-
 
         }
 

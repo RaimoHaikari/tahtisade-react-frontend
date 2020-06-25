@@ -10,11 +10,12 @@ import About from './components/About';
 
 import Movies from './layout/Movies/Movies';
 import Genres from './layout/Genres'
+import Critics from './layout/Critics'
 import Elokuva from './components/Elokuva';
 
 
-import FrontPage from './layout/FrontPage';
-import Toolbar from './components/Toolbar/Toolbar';
+import FrontPage from './layout/FrontPage/index';
+// import Toolbar from './components/Toolbar/Toolbar';
 import Navigation from './components/Navbar'
 
 
@@ -54,7 +55,7 @@ class App extends Component {
           <Toolbar drawerClickHandler={this.drawerToggleClickHandler} />
           <SlideDrawer show={this.state.slideDrawerOpen}/>
           {backDrop}
-
+Critics
      */
     return (
       <Router>
@@ -67,6 +68,7 @@ class App extends Component {
               <Route path="/elokuvat" exact component={Movies} />
               <Route path="/elokuvat/:id" component={Elokuva} />
               <Route path="/genret" exact component={Genres} />
+              <Route path="/critics" exact component={Critics} />
             </Switch>
           </div>
         </div>
