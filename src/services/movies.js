@@ -52,6 +52,22 @@ const getGenreList = () => {
     })
 }
 
+
+
+/*
+ * Haetaan yhteenveto arvostelijoiden antamista tähdistä
+ */
+const getCriticsSummary = () => {
+    const request = axios.get(`${baseUrl}api/reviews?include=general`);
+
+    return request.then(response => {
+
+        console.log("- getCriticsSummary status", response.status);
+        return response.data;
+
+    })
+}
+
 /*
  * Haetaan luettelo elokuvien luokitteluissa käytetyistä genreistä
  */
@@ -96,6 +112,7 @@ const getMovieListing = () => {
 export default { 
     getComments,
     getGenreList,
+    getCriticsSummary,
     getGenreSummary,
     getFrontPageMovies,
     getMovieListing

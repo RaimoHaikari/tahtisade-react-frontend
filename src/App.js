@@ -61,7 +61,7 @@ Critics
       <Router>
         <div style={{height: '100%'}}>
           <Navigation />
-          <div style={{marginTop: '100px'}}>
+          <div style={{marginTop: '135px'}}>
             <Switch>
               <Route path="/" exact component={FrontPage} />
               <Route path="/about" component={About} />
