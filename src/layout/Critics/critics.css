@@ -1,7 +1,7 @@
-.row {
-    border: 2px solid navy;
-}
+.row {}
 
-.col {
-    border: 1px solid red;
+.col {}
+
+.dataTable-active-sorting-field {
+    color: red;
 }

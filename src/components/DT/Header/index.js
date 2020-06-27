@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+/*
+ *
+ */
 const Header = ({ headers, onSorting }) => {
 
     const [sortingField, setSortingField] = useState("");
@@ -24,7 +27,11 @@ const Header = ({ headers, onSorting }) => {
                 {
                     headers.map(({name, field, sortable}) => {
                         return(
-                            <th 
+                            <th
+                                className = {
+                                    sortable?"font-weight-bold": "font-weight-light",
+                                    (sortingField && sortingField === field)?" dataTable-active-sorting-field":null
+                                } 
                                 onClick={() => sortable ? onSortingChange(field) :null}
                                 key={field}
                             >

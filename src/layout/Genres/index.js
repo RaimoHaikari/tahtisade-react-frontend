@@ -3,7 +3,6 @@ import React, {useState,useEffect, useMemo} from 'react';
 import movieService from '../../services/movies';
 
 import './genres.css';
-
 import {TableHeader, Pagination, Search} from '../../components/DT'
 
 
@@ -90,8 +89,6 @@ const Genres = () => {
 
         movieService.getGenreSummary()
             .then(gnrs => {
-
-                console.log(gnrs)
 
                 const newGenres = {
                     ...genres,
