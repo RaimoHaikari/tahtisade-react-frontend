@@ -25,7 +25,7 @@ const SideToolbar = ({title, data, click, toggleClick, btnClick}) => {
 
         <div className="accordion_section">
 
-            <button onClick={toggleAccordion} className={`accordion ${activeState}`}>
+            <button onClick={toggleAccordion} className={`st-accordion ${activeState}`}>
                 <p className="accordion_title">
                     {title}
                 </p>

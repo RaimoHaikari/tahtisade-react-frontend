@@ -1,0 +1,21 @@
+.settings-accordion {
+    display: block !important;
+    padding: 0 !important;
+}
+
+.settings-accordion:hover {
+    background-color:yellow !important;
+  }
+
+.settings-accordion-card {}
+
+.settings-accordion-header {}
+
+.settings-accordion-toggle {}
+
+.settings-accordion-Collapse {
+    
+}
+
+
+.settings-accordion-cardBody {}

@@ -1,4 +1,4 @@
-import React, {useState,useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 
 import movieService from '../../services/movies';
 
@@ -9,7 +9,9 @@ import Table from 'react-bootstrap/Table';
 
 import {TableHeader, Pagination, Search} from '../../components/DT'
 import useFullPageLoader from "../../hooks/useFullPageLoader";
-import Settings from "../../components/Settings"
+
+import SettingsHolder from "../Accordion"
+import Settings from "../../components/CriticsListPage/Settings"
 
 import './critics.css';
 
@@ -19,6 +21,9 @@ const Critics = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     const [sorting, setSorting] = useState({field: "", order: "asc"})
+
+    // Montako arvostelua pitää löytyä, jotta nimi näkyy listalla
+    const [atLeast, setAtLeast] = useState(10);
 
 
     const ITEMS_PER_PAGE = 20;
@@ -51,6 +56,17 @@ const Critics = () => {
     const itemsData = useMemo(() => {
 
         let computedItems = items.critcs;
+
+        /*
+         * Mukana riittävä määrä arvosteluja
+         */
+        computedItems = computedItems.filter(item => {
+
+            return (
+                item.numbOfRevies >= atLeast 
+            )
+
+        })
 
         /*
          * Haku kohdistuu nimeen.
@@ -100,7 +116,7 @@ const Critics = () => {
             (currentPage - 1) * ITEMS_PER_PAGE + ITEMS_PER_PAGE
         );
 
-    }, [items.critcs, currentPage, search, sorting])
+    }, [items.critcs, currentPage, search, sorting, atLeast])
 
     /*
      * Ladataan arvosteluista koottu yhteenveto
@@ -154,7 +170,16 @@ const Critics = () => {
             <Row>
 
                 <Col xs={2}>
-                    <Settings />
+                    <SettingsHolder>
+                        <Settings
+                            min = {1}
+                            max = {items.critcs.length}
+                            onSlide={(value) => {
+                                setAtLeast(value)
+                            }} 
+                            atLeast={atLeast}
+                        />
+                    </SettingsHolder>
                 </Col>
 
                 <Col>

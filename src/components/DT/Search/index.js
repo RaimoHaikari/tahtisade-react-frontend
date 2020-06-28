@@ -7,6 +7,7 @@ const Search = ({ onSearch }) => {
         setSearch(value);
         onSearch(value);
     };
+    
     return (
         <input
             type="text"
