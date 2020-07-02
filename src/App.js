@@ -4,13 +4,12 @@ import './components/FontawesomeIcons';
 
 import './App.css';
 
-// import './styles/cardStyles.css';
-
-import About from './components/About';
 
 import Movies from './layout/Movies/Movies';
-import Genres from './layout/Genres'
-import Critics from './layout/Critics'
+import Genres from './layout/Genres';
+import Critics from './layout/Critics';
+import About from './layout/About';
+
 import Elokuva from './components/Elokuva';
 
 

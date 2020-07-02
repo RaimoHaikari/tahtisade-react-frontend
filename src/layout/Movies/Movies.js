@@ -1,6 +1,13 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect, useMemo} from 'react';
 
-import Pagination from '../../components/MovieListPage/Pagination'
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
+import TablePresentation from "../../components/MovieListPage/TablePresentation";
+import {Pagination, Search} from '../../components/DT';
 
 import MovieList from '../../components/MovieListPage/MoviesList';
 import SideToolbar from '../../components/MovieListPage/SideToolbar'
@@ -19,7 +26,6 @@ const Movies = () => {
         
     })
 
-    // items.movies
     const [items, setItems] = useState({
         message: '',
         loading: true,
@@ -28,8 +34,12 @@ const Movies = () => {
         phase: 'loading'
     });
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
     const [moviesPerPage, setMoviesPerPage] = useState(10);
+    const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [sorting, setSorting] = useState({field: "", order: "asc"});
+    const [itemsPerPage, setItemsPerPage] = useState(20);
 
     let indexOfLastMovie = currentPage * moviesPerPage;
     let indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
@@ -210,9 +220,65 @@ console.log("............................");
     }, [])
 
 
-    const updateMovieListToMatchSelectedGenres = () => {
-        console.log("Pitäs päivittää elokuvalista...")
-    }
+   /* 
+     * Tulostettavan aineiston suodatus
+     *
+     * useMemo
+     * - Pitäisi jotenkin nopeuttaa isojen aineistojen käsittelyä 
+     * - toimii cachena
+     */
+    const itemsData = useMemo(() => {
+
+        let computedMovies = items.allTheMovies;
+
+        /*
+         * Haku kohdistuu nimeen.
+         item => item.name.toLowercase().includes(search.toLowerCase()) 
+         */
+        if(search) {
+
+            computedMovies = computedMovies.filter(item => {
+
+                return (
+                    item.nimi.toLowerCase().includes(search.toLowerCase()) 
+                )
+
+            })
+
+        }
+
+        // Lajittelu
+        if(sorting.field){
+
+            const reversed = sorting.order === "asc" ? 1 : -1;
+
+            computedMovies = computedMovies.sort((a,b) => {
+
+                let val;
+
+                switch (sorting.field) {
+                    case "name":
+                      val = reversed * a[sorting.field].localeCompare(b[sorting.field])
+                      break;
+                    default:
+                        val =  reversed * ((a[sorting.field] > b[sorting.field]) ? 1 : (a[sorting.field] < b[sorting.field]) ? -1 : 0)
+                  }
+
+                return(val)
+            })
+
+        }
+
+        // - näytettävien objektien kokonaismäärä
+        setTotalItems(computedMovies.length)
+
+        return computedMovies.slice(
+            (currentPage - 1) * itemsPerPage,
+            (currentPage - 1) * itemsPerPage + itemsPerPage
+        );
+
+    }, [items, sorting, currentPage, search])
+
 
 
     const setVisibleMovies = () => {
@@ -224,52 +290,88 @@ console.log("............................");
 
     setVisibleMovies();
 
+
     /*
-     * 
+     *                                     setSearch(value)
+                                    setCurrentPage(1)
      */
     return (
-        <div className="container containerMovies">
+        <Container>
 
-            <div className="row rowTotalNumbOfMovies"> 
-                <div className="col-3 colMovies"></div>
-                <div className="col-9 colMovies">
-                    <p className="summary">{`Yhteensä ${filteredMovies.length} elokuvaa`}</p>
-                </div>
-            </div>
+            <Row>
+                <Col>
 
-            <div className="row rowPagination"> 
-                <div className="col-3 colMovies"></div>
-                <div className="col-9 colMovies">
-                    <Pagination 
-                        currentPage={currentPage}
-                        paginate={paginate}
-                        moviesPerPage={moviesPerPage} 
-                        totalMovies={filteredMovies.length} 
-                    />
-                </div>
-            </div>
+                    <Row>
+                        <Col>
+                            <Pagination 
+                                total={totalItems}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                onPageChange={page => setCurrentPage(page)}
+                            />
+                        </Col>
 
-            <div className="row rowMovies">
+                        <Col>
+                            <Search 
+                                onSearch={(value) => {
+                                    setSearch(value)
+                                    setCurrentPage(1)
+                                }}
+                            />
+                        </Col>
 
-                <div className="col-3 colMovies">
-                    <SideToolbar 
-                        title="Genret" 
-                        data={genres}
-                        click={chkBoxHandler}
-                        btnClick={updateMovieListToMatchSelectedGenres}
-                        toggleClick={btnToggleGenresHandler}
-                    />
-                </div>
+                        <Col>
+                            {search.length !== 0 && <span className="searchMsg">{`Hakuehdon täyttää ${totalItems} elokuvaa`}</span>}
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
 
-                <div className="col-9 colMovies">
-                    <MovieList 
-                        movies = {visibleMovies}
-                        loadingPhase = {items.phase}
-                    />
-                </div>   
+            <Row>
 
-            </div>
-        </div>
+                <Col>
+
+                    <Tabs className="movies-page-tabs" defaultActiveKey="home" id="movies-page-tab">
+                    
+                        <Tab eventKey="home" title="Taulukko" className="movies-page-tab">
+
+                            <TablePresentation
+                                itemsOverAll = {items.allTheMovies.length}
+                                totalItems = {totalItems} 
+                                itemsPerPage = {itemsPerPage}
+                                setSearch = {setSearch}
+                                setCurrentPage = {setCurrentPage}
+                                currentPage = {currentPage}
+                                search={search}
+                                onSorting = {(field, order) => setSorting({field, order})}
+                                movies = {itemsData}
+                            />
+
+                        </Tab>
+
+
+
+                        <Tab eventKey="profile" title="Kuvakkeet" className="movies-page-tab">
+                            <MovieList
+                                itemsOverAll = {items.allTheMovies.length}
+                                totalItems = {totalItems} 
+                                itemsPerPage = {itemsPerPage}
+                                setCurrentPage = {setCurrentPage}
+                                setSearch = {setSearch}
+                                search={search}
+                                currentPage = {currentPage}
+                                movies = {itemsData}
+                                loadingPhase = {items.phase}
+                            />
+                        </Tab>
+
+
+                    </Tabs>
+                
+                </Col>
+            </Row>
+
+        </Container>
     );
 }
 

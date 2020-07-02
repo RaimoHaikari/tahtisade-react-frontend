@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import './header.css';
 
 /*
  *
@@ -20,18 +21,24 @@ const Header = ({ headers, onSorting }) => {
         onSorting(field, order);
     }
 
-
+    /*
+        sortable?"font-weight-bold": "font-weight-light",
+        (sortingField && sortingField === field)?" dataTable-active-sorting-field":null
+    */
     return (
         <thead>
             <tr>
                 {
                     headers.map(({name, field, sortable}) => {
+
+                        let a = sortable?"font-weight-bold pointer": "font-weight-light";
+                        let b = (sortingField && sortingField === field)?"dataTable-active-sorting-field":"";
+
+                        let className  =  b.length === 0?`${a}`:`${a} ${b}`;
+
                         return(
                             <th
-                                className = {
-                                    sortable?"font-weight-bold": "font-weight-light",
-                                    (sortingField && sortingField === field)?" dataTable-active-sorting-field":null
-                                } 
+                                className = {className}
                                 onClick={() => sortable ? onSortingChange(field) :null}
                                 key={field}
                             >

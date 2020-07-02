@@ -25,7 +25,6 @@ const Critics = () => {
     // Montako arvostelua pitää löytyä, jotta nimi näkyy listalla
     const [atLeast, setAtLeast] = useState(10);
 
-
     const ITEMS_PER_PAGE = 20;
 
     const headers = [
@@ -167,22 +166,11 @@ const Critics = () => {
     return (
 
         <Container fluid>
+            
             <Row>
-
-                <Col xs={2}>
-                    <SettingsHolder>
-                        <Settings
-                            min = {1}
-                            max = {items.critcs.length}
-                            onSlide={(value) => {
-                                setAtLeast(value)
-                            }} 
-                            atLeast={atLeast}
-                        />
-                    </SettingsHolder>
-                </Col>
-
+                <Col xs={2}></Col>
                 <Col>
+
                     <Row>
 
                         <Col>
@@ -205,6 +193,26 @@ const Critics = () => {
 
 
                     </Row>
+                
+                </Col>
+            </Row>
+            
+            <Row>
+
+                <Col xs={2}>
+                    <SettingsHolder>
+                        <Settings
+                            min = {1}
+                            max = {items.critcs.length}
+                            onSlide={(value) => {
+                                setAtLeast(value)
+                            }} 
+                            atLeast={atLeast}
+                        />
+                    </SettingsHolder>
+                </Col>
+
+                <Col>
 
                     <Table striped bordered hover>
 
