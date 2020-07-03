@@ -60,7 +60,8 @@ const MovieList = ({movies, itemsOverAll, totalItems, itemsPerPage, search, curr
             movies.map((movie) => {
 
                 return (
-                    <MoviesPageMovieCard 
+                    <MoviesPageMovieCard
+                        avg={movie.averageOfReviews} 
                         key={movie.id} 
                         nimi={movie.nimi} 
                         kuva={movie.img} 
