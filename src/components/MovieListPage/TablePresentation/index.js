@@ -1,12 +1,14 @@
 import React from 'react';
 import './tablePresentation.css';
 
+import {Link} from 'react-router-dom';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 
-import {TableHeader, Pagination, Search} from '../../DT';
+import {TableHeader} from '../../DT';
 
 /*
  * @movies: suodatetut elokuvat 
@@ -61,7 +63,9 @@ const TablePresentation = (
                                             <th scope="row1">
                                                 {index + 1}
                                             </th>
-                                            <td>{item.nimi}</td>
+                                            <td>
+                                                <Link to={`/elokuvat/${item.id}`}>{item.nimi}</Link>
+                                            </td>
                                             <td>{item.numberOfReviews}</td>
                                             <td>{item.averageOfReviews}</td>
                                             <td>{pmv}</td>

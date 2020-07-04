@@ -139,7 +139,6 @@ const getMovieListing = () => {
     return request.then(response => {
 
         console.log("- getMoviePageMovies status", response.status);
-        console.log(response.data);
 
         const x = response.data.map((r,i) => {
 

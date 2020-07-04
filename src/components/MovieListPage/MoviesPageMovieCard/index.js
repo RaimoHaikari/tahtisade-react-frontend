@@ -29,29 +29,38 @@ const MoviesPageMovieCard = ({nimi, kuva, id, ensiIlta, avg}) => {
         let val = [];
 
         for(let i = 0; i < Math.floor(avg); i ++){
-            val.push(<FontAwesomeIcon icon="star" size="2x"  style={{color: "navy", margin: "2px", background: "none"}}/>)
+            val.push(<FontAwesomeIcon key={i} icon="star" style={{color: "navy", margin: "2px", background: "none"}}/>)
         }
 
         if(avg % 1 >= 0.5){
-            val.push(<FontAwesomeIcon icon="star-half" size="2x"  style={{color: "navy", margin: "2px", background: "none"}}/>)
+            val.push(<FontAwesomeIcon  key={6} icon="star-half"  style={{color: "navy", margin: "2px", background: "none"}}/>)
         }
 
         return val;
 
     }
 
+    /*
+     * <Link to={`/elokuvat/${id}`}>
+     */
     return(
         <Col lg={3} className="mb-5">
             <Card>
                 <Card.Header className="text-truncate">{nimi}</Card.Header>
                 <Card.Body>
-                    <Image src={imgUrl} rounded fluid />
+
+                    <Link to={`/elokuvat/${id}`}>
+                        <Image src={imgUrl} rounded fluid />
+                    </Link>
+
                     <Card.Text className="mt-2">
                         <span className="font-weight-bold mr-2">Ensi-ilta:</span>{strEI}
                     </Card.Text>
+
                     <Card.Text className="mt-2">
                         {visualizeStars()}
                     </Card.Text>
+                    
                 </Card.Body>
             </Card>
         </Col>

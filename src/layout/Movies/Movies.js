@@ -6,11 +6,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+import useFullPageLoader from "../../hooks/useFullPageLoader";
+
 import TablePresentation from "../../components/MovieListPage/TablePresentation";
 import {Pagination, Search} from '../../components/DT';
 
 import MovieList from '../../components/MovieListPage/MoviesList';
-import SideToolbar from '../../components/MovieListPage/SideToolbar'
+
+import SettingsHolder from "../Accordion"
+import Settings from "../../components/MovieListPage/Settings"
 
 import movieService from '../../services/movies';
 
@@ -41,11 +45,8 @@ const Movies = () => {
     const [sorting, setSorting] = useState({field: "", order: "asc"});
     const [itemsPerPage, setItemsPerPage] = useState(20);
 
-    let indexOfLastMovie = currentPage * moviesPerPage;
-    let indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+    const [loader, showLoader, hideLoader] = useFullPageLoader();
 
-    let filteredMovies;     // Suodatatetut elokuvat
-    let visibleMovies;      // Aktiivisella sivulla näytettävät elokuvat
 
     /*
      * Pikavalintapainikkeet, joilla voidaan valita tai tyhjentää kerralla kaikki genret
@@ -146,11 +147,12 @@ const Movies = () => {
 
                 setItems(newItems);
 
+                hideLoader();
+
             })
             .catch(err => {
 
-
-            debugger
+                debugger
 
 console.log("......... e r r o r ........");
 console.log("statusText: ", err.response.statusText);
@@ -187,20 +189,12 @@ console.log("............................");
         
             return found;
         
-        }) 
+        })
+        .map((m) => m.googleID)
 
         return activeMovies;
     }
 
-    /*
-     * - valitaan elokuvalistalta ne, jotka näkyvät aktiivisella sivulla (pagination)
-     */
-    const getVisibleMovies = () => {
-
-        const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie)
-        return currentMovies;
-
-    }
 
     /*
      * Vaihdetaan elokuvakuvakkeita esittävää sivua
@@ -210,15 +204,14 @@ console.log("............................");
     }
 
 
-
     useEffect(() => {
-        console.log('effect');
+
+        showLoader();
 
         fetchGenres();
         fetchItems();
         
     }, [])
-
 
    /* 
      * Tulostettavan aineiston suodatus
@@ -226,10 +219,20 @@ console.log("............................");
      * useMemo
      * - Pitäisi jotenkin nopeuttaa isojen aineistojen käsittelyä 
      * - toimii cachena
+     * 
      */
     const itemsData = useMemo(() => {
 
         let computedMovies = items.allTheMovies;
+
+        /*
+         * päivitetään näkyvyys Genre-määritysten ostalta
+         */
+        const genreFiltered = getActiveMovies();
+        //setVisibleMovies();
+
+        computedMovies = computedMovies.filter(item => genreFiltered.includes(item.googleID));
+
 
         /*
          * Haku kohdistuu nimeen.
@@ -277,28 +280,17 @@ console.log("............................");
             (currentPage - 1) * itemsPerPage + itemsPerPage
         );
 
-    }, [items, sorting, currentPage, search])
-
-
-
-    const setVisibleMovies = () => {
-
-        filteredMovies = getActiveMovies();
-        visibleMovies = getVisibleMovies();
-
-    }
-
-    setVisibleMovies();
+    }, [items, genres, sorting, currentPage, search])
 
 
     /*
-     *                                     setSearch(value)
-                                    setCurrentPage(1)
+     *
      */
     return (
         <Container>
 
             <Row>
+
                 <Col>
 
                     <Row>
@@ -325,9 +317,20 @@ console.log("............................");
                         </Col>
                     </Row>
                 </Col>
+
             </Row>
 
             <Row>
+
+                <Col xs={2}>
+                    <SettingsHolder>
+                        <Settings
+                            toggle = {(val) => btnToggleGenresHandler(val)} 
+                            click = {(id) => chkBoxHandler(id) }
+                            genres = {genres.genres}
+                        />
+                    </SettingsHolder>
+                </Col>
 
                 <Col>
 
@@ -370,7 +373,7 @@ console.log("............................");
                 
                 </Col>
             </Row>
-
+            {loader}
         </Container>
     );
 }
