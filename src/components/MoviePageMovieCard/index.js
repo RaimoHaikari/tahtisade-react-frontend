@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect, useMemo} from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -32,9 +32,11 @@ const MoviePageMovieCard = (props) => {
     const headers = [
         { name: "No#", field: "no", sortable: false },
         { name: "Nimi", field: "name", sortable: true },
-        { name: "Tähdet", field: "starsAverage", sortable: true },
-        { name: "Lähde", field: "numbOfRevies", sortable: true }
+        { name: "Tähdet", field: "stars", sortable: true },
+        { name: "Lähde", field: "publisher", sortable: true }
     ];
+
+    const [sorting, setSorting] = useState({field: "", order: "asc"})
 
     const getActors = (role) => {
 
@@ -58,6 +60,65 @@ const MoviePageMovieCard = (props) => {
             </ul>
         )
     }
+
+
+    /* 
+     * Tulostettavan aineiston suodatus
+     *
+     * useMemo
+     * - Pitäisi jotenkin nopeuttaa isojen aineistojen käsittelyä 
+     * - toimii cachena
+     */
+    const reviewsData = useMemo(() => {
+
+        let computedReviews = props.arvostelut;
+
+        // Lajittelu
+        if(sorting.field){
+
+            const reversed = sorting.order === "asc" ? 1 : -1;
+
+            computedReviews = computedReviews.sort((a,b) => {
+
+                console.log(a)
+
+                let val;
+
+                switch (sorting.field) {
+                    case "name":
+                    case "publisher":
+                      val = reversed * a[sorting.field].localeCompare(b[sorting.field])
+                      break;
+                    default:
+                        val =  reversed * ((a[sorting.field] > b[sorting.field]) ? 1 : (a[sorting.field] < b[sorting.field]) ? -1 : 0)
+                  }
+
+                return(val)
+            })
+
+        }
+
+        return computedReviews;
+
+    }, [props.arvostelut, sorting]);
+
+
+    const visualizeStars = (stars) => {
+
+        let val = [];
+
+        for(let i = 0; i < Math.floor(stars); i ++){
+            val.push(<FontAwesomeIcon key={i} icon="star" style={{color: "navy", margin: "2px", background: "none"}}/>)
+        }
+
+        if(stars % 1 >= 0.5){
+            val.push(<FontAwesomeIcon  key={6} icon="star-half"  style={{color: "navy", margin: "2px", background: "none"}}/>)
+        }
+
+        return val;
+
+    }
+
 
     return (
 
@@ -149,20 +210,20 @@ const MoviePageMovieCard = (props) => {
                         <Table striped bordered hover>
 
                             <TableHeader
-                                onSorting = {() => console.log("tilu lilu")}
+                                onSorting = {(field, order) => setSorting({field, order})}
                                 headers={headers}
                             />
 
                             <tbody>
                                 {
-                                    props.arvostelut.map((item, index) => {
+                                    reviewsData.map((item, index) => {
                                         return(
                                             <tr key={index}>
                                                 <th scope="row1">
                                                     {index + 1}
                                                 </th>
                                                 <td>{item.name}</td>
-                                                <td>{item.stars}</td>
+                                                <td>{visualizeStars(item.stars)}</td>
                                                 <td>{item.link}</td>
                                             </tr>
                                         )

@@ -9,7 +9,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import MoviePageMovieCard from '../../components/MoviePageMovieCard'
+import MoviePageMovieCard from '../../components/MoviePageMovieCard';
+import Clapper from "../../components/Shared/clap"
+
+import './singleMovie.css';
 
 const SingleMovie = () => {
 
@@ -38,6 +41,7 @@ const SingleMovie = () => {
                 console.log(movieData)
                 hideLoader();
 
+                // status: "ready",
                 const newMovie = {
                     ...movie,
                     status: "ready",
@@ -65,13 +69,21 @@ const SingleMovie = () => {
         fetchMovieData();
     }, [])
 
+    /*
+     *
+     */
     const switchLayout = () => {
 
         switch(movie.status) {
             case "loading":
 
                 return (
-                    <p>Ladataan</p>
+                    <Row>
+                        <Col className="singleMovie-col">
+                            <Clapper />
+                        </Col>
+                    </Row>
+                    
                 );
                 
                 break;

@@ -10,7 +10,9 @@
 
 .settings-accordion-card {}
 
-.settings-accordion-header {}
+.settings-accordion-header {
+  padding: .5rem 0.5rem!important;
+}
 
 .settings-accordion-toggle {
   cursor: pointer;
