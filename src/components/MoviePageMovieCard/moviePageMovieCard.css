@@ -1,0 +1,34 @@
+.moviePageMovieCard-row {
+    padding: 5px;
+}
+
+.moviePageMovieCard-col {
+}
+
+/* 
+ * Näyttelijä, ohjaaja jne. listaukset
+ */
+.moviePageMovieCard-dataRow {
+    margin-bottom: 10px;
+}
+
+.moviePageMovieCard-ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.moviePageMovieCard-li{
+    float: left;
+    margin-right: 10px;
+}
+
+.moviePageMovieCard-badge {
+    padding: 10px!important;
+    margin-right: 10px;
+}
+
+.moviePageMovieCard-badge a {
+    color: white;
+}

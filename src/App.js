@@ -9,6 +9,7 @@ import Movies from './layout/Movies/Movies';
 import Genres from './layout/Genres';
 import Critics from './layout/Critics';
 import About from './layout/About';
+import SingleMovie from './layout/SingleMovie';
 
 import Elokuva from './components/Elokuva';
 
@@ -65,7 +66,7 @@ Critics
               <Route path="/" exact component={FrontPage} />
               <Route path="/about" component={About} />
               <Route path="/elokuvat" exact component={Movies} />
-              <Route path="/elokuvat/:id" component={Elokuva} />
+              <Route path="/elokuvat/:id" component={SingleMovie} />
               <Route path="/genret" exact component={Genres} />
               <Route path="/critics" exact component={Critics} />
             </Switch>

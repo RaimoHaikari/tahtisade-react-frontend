@@ -126,6 +126,43 @@ const getGenreSummary = () => {
     })
 }
 
+/*
+ * Haetaan kantaan talletetut, yksittäiseen elokuvaan liittyvät tiedot
+
+             return {
+                ...r,
+                numberOfReviews: r.stars.length, 
+                averageOfReviews: (r.stars.length===0?0:round(average( r.stars),2)),
+                id: i,
+                ensiIlta: new Date(r.ensiIlta),
+                month: (new Date(r.ensiIlta).getMonth() + 1),
+                year: new Date(r.ensiIlta).getFullYear(),
+                date: new Date(r.ensiIlta).getDate(),
+                day: days[new Date(r.ensiIlta).getDay()]
+            }
+ */
+const getMovieData = (id) => {
+
+    const request = axios.get(`${baseUrl}api/movies/${id}`);
+
+    return request.then(response => {
+
+        console.log("- getMovieData status", response.status);
+
+        const data = response.data;
+
+        return {
+            ...data,
+            ensiIlta: new Date(data.ensiIlta),
+            month: (new Date(data.ensiIlta).getMonth() + 1),
+            year: new Date(data.ensiIlta).getFullYear(),
+            date: new Date(data.ensiIlta).getDate(),
+            day: days[new Date(data.ensiIlta).getDay()]           
+        }
+
+    })
+}
+
 
 /*
  * Haetaan kaikki kantaan tallennetut elokuvat
@@ -166,5 +203,6 @@ export default {
     getCriticsSummary,
     getGenreSummary,
     getFrontPageMovies,
+    getMovieData,
     getMovieListing
 }
