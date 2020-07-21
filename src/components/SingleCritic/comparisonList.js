@@ -9,8 +9,6 @@ import ListGroup from "react-bootstrap/ListGroup";
  */
 const ComparisonList = ({data, clickHandler}) => {
 
-    console.log(data)
-
     /*
                         <div>
                             {d.name} 

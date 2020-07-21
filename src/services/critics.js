@@ -22,6 +22,26 @@ const getReviewerData = (id) => {
     })
 }
 
-export default { 
+const getCompData = (id, compId) => {
+
+    const request = axios.get(`${baseUrl}api/reviews/${id}?compId=${compId}`);
+
+
+    return request.then(response => {
+
+        console.log("- getCompData status", response.status);
+
+        const data = response.data;
+
+        return {
+            ...data         
+        }
+
+    })
+
+}
+
+export default {
+    getCompData, 
     getReviewerData
 }
