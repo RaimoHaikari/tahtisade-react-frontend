@@ -1,0 +1,18 @@
+.tahtisade-criticPage-list-group-item {
+    padding: .25rem 0.5rem!important;
+    cursor: pointer
+}
+
+.tahtisade-criticPage-text-muted {
+    color: #6c757d;
+}
+
+
+.tahtisade-criticPage-list-group-item:hover {
+    background-color: #2586d7;
+    color: #fff;
+}
+
+.tahtisade-criticPage-list-group-item:hover > .tahtisade-criticPage-text-muted{
+    color: black;
+}

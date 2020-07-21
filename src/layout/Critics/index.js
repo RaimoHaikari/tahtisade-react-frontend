@@ -2,6 +2,8 @@ import React, {useState, useEffect, useMemo} from 'react';
 
 import movieService from '../../services/movies';
 
+import {Link} from 'react-router-dom';
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -230,7 +232,11 @@ const Critics = () => {
                                         <th scope="row1">
                                             {index + 1}
                                         </th>
-                                        <td>{item.name}</td>
+                                        <td>
+                                            <Link to={`critics/${item.id}`}>
+                                                {item.name}
+                                            </Link>
+                                        </td>
                                         <td>{item.starsAverage}</td>
                                         <td>{item.numbOfRevies}</td>
                                     </tr>

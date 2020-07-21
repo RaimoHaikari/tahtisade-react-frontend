@@ -64,7 +64,7 @@ const TablePresentation = (
                                                 {index + 1}
                                             </th>
                                             <td>
-                                                <Link to={`/elokuvat/${item.id}`}>{item.nimi}</Link>
+                                                <Link to={`/elokuvat/${item.googleID}`}>{item.nimi}</Link>
                                             </td>
                                             <td>{item.numberOfReviews}</td>
                                             <td>{item.averageOfReviews}</td>
