@@ -1,165 +1,171 @@
-const genres = [
+reviews = [
   {
-    "genre": "Comedy",
-    "numberOfMovies": 20,
-    "numberOfReviews": 83,
-    "starsAverage": 3.036144578313253,
-    "id": 0
+    "criticID": "päiviValotie",
+    "googleID": 6,
+    "stars": 3,
+    "link": "Turun Sanomat 13.3.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "La Belle Époque"
   },
   {
-    "genre": "Drama",
-    "numberOfMovies": 26,
-    "numberOfReviews": 138,
-    "starsAverage": 3.3731884057971016,
-    "id": 1
+    "criticID": "päiviValotie",
+    "googleID": 7,
+    "stars": 3,
+    "link": "Turun Sanomat 13.3.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Weathering with You"
   },
   {
-    "genre": "Romance",
-    "numberOfMovies": 3,
-    "numberOfReviews": 19,
-    "starsAverage": 3.5,
-    "id": 2
+    "criticID": "päiviValotie",
+    "googleID": 11,
+    "stars": 2,
+    "link": "Turun Sanomat 21.2.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Se mieletön remppa"
   },
   {
-    "genre": "Animation",
-    "numberOfMovies": 5,
-    "numberOfReviews": 16,
-    "starsAverage": 2.9375,
-    "id": 3
+    "criticID": "päiviValotie",
+    "googleID": 14,
+    "stars": 3,
+    "link": "Turun Sanomat 31.1.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Little Women"
   },
   {
-    "genre": "Family",
-    "numberOfMovies": 7,
-    "numberOfReviews": 26,
-    "starsAverage": 2.6923076923076925,
-    "id": 4
+    "criticID": "päiviValotie",
+    "googleID": 17,
+    "stars": 3,
+    "link": "Turun Sanomat 24.1.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Just Mercy"
   },
   {
-    "genre": "Biography",
-    "numberOfMovies": 6,
-    "numberOfReviews": 28,
-    "starsAverage": 3.2857142857142856,
-    "id": 5
+    "criticID": "päiviValotie",
+    "googleID": 18,
+    "stars": 4,
+    "link": "Turun Sanomat 24.1.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Jäähyväiset"
   },
   {
-    "genre": "Thriller",
-    "numberOfMovies": 3,
-    "numberOfReviews": 20,
-    "starsAverage": 4.15,
-    "id": 6
+    "criticID": "päiviValotie",
+    "googleID": 1,
+    "stars": 3,
+    "link": "Turun Sanomat 6.3.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Elämää kuoleman jälkeen"
   },
   {
-    "genre": "History",
-    "numberOfMovies": 1,
-    "numberOfReviews": 1,
-    "starsAverage": 4,
-    "id": 7
+    "criticID": "päiviValotie",
+    "googleID": 21,
+    "stars": 3,
+    "link": "Turun Sanomat 14.2.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Heinähattu, Vilttitossu ja ärhäkkä koululainen"
   },
   {
-    "genre": "Action",
-    "numberOfMovies": 5,
-    "numberOfReviews": 22,
-    "starsAverage": 2.409090909090909,
-    "id": 8
+    "criticID": "päiviValotie",
+    "googleID": 3,
+    "stars": 3,
+    "link": "Turun Sanomat 7.2.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Bombshell"
   },
   {
-    "genre": "Adventure",
-    "numberOfMovies": 7,
-    "numberOfReviews": 19,
-    "starsAverage": 2.6315789473684212,
-    "id": 9
+    "criticID": "päiviValotie",
+    "googleID": 24,
+    "stars": 2,
+    "link": "Turun Sanomat 3.1.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Lasse - Best Man"
   },
   {
-    "genre": "Crime",
-    "numberOfMovies": 6,
-    "numberOfReviews": 30,
-    "starsAverage": 2.8666666666666667,
-    "id": 10
+    "criticID": "päiviValotie",
+    "googleID": 25,
+    "stars": 2,
+    "link": "Turun Sanomat 3.1.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Teräsleidit"
   },
   {
-    "genre": "Documentary",
-    "numberOfMovies": 3,
-    "numberOfReviews": 4,
-    "starsAverage": 4.25,
-    "id": 11
+    "criticID": "päiviValotie",
+    "googleID": 2,
+    "stars": 3,
+    "link": "Turun Sanomat 6.3.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Emma."
   },
   {
-    "genre": "War",
-    "numberOfMovies": 3,
-    "numberOfReviews": 17,
-    "starsAverage": 4,
-    "id": 12
+    "criticID": "päiviValotie",
+    "googleID": 30,
+    "stars": 1,
+    "link": "Turun Sanomat 21.2.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "Koiranpäivät"
   },
   {
-    "genre": "Sport",
-    "numberOfMovies": 1,
-    "numberOfReviews": 6,
-    "starsAverage": 3.3333333333333335,
-    "id": 13
+    "criticID": "päiviValotie",
+    "googleID": 35,
+    "stars": 3,
+    "link": "Turun Sanomat 28.2.2020",
+    "publisher": "Turun Sanomat",
+    "name": "Päivi Valotie",
+    "elokuvanNimi": "The Specials"
+  }
+];
+
+let compset = [
+  {
+    "id": "muutKriitikot",
+    "reviews": [
+      {
+        "googleID": 1,
+        "count": 4,
+        "stars": 3.5
+      },
+      {
+        "googleID": 2,
+        "count": 2,
+        "stars": 3.5
+      },
+      {
+        "googleID": 3,
+        "count": 4,
+        "stars": 2.75
+      }
+    ]
   },
   {
-    "genre": "Horror",
-    "numberOfMovies": 3,
-    "numberOfReviews": 10,
-    "starsAverage": 3.1,
-    "id": 14
-  },
-  {
-    "genre": "Sci-Fi",
-    "numberOfMovies": 2,
-    "numberOfReviews": 8,
-    "starsAverage": 3.375,
-    "id": 15
-  },
-  {
-    "genre": "Mystery",
-    "numberOfMovies": 1,
-    "numberOfReviews": 4,
-    "starsAverage": 3.25,
-    "id": 16
+    "id": "riittaVaisanen",
+    "reviews": [
+      {
+        "googleID": "6",
+        "count": 4,
+        "stars": 3.5
+      }
+    ]
   }
 ]
 
-function compare( a, b ) {
+let activeCompsetId = "muutKriitikot"
 
-  let byCol = 'genre'
+let sharedMovies = compset
+  .filter(c => c.id === activeCompsetId)[0].reviews
+  .map(d => d.googleID);
 
-  if ( a[byCol] < b[byCol] ){
-    return -1;
-  }
-  if ( a[byCol] > b[byCol] ){
-    return 1;
-  }
-  return 0;
+let b = reviews.filter(r => sharedMovies.includes( r.googleID));
 
-}
-
-var People = [
-  {Name: "Name", Surname: "Surname"},
-  {Name:"AAA", Surname:"ZZZ"},
-  {Name: "Name", Surname: "AAA"}
-];
-
-function dynamicSort(property) {
-  
-  var sortOrder = 1;
-
-  if(property[0] === "-") {
-      sortOrder = -1;
-      property = property.substr(1);
-  }
-
-
-  return function (a,b) {
-      /* next line works with strings and numbers, 
-       * and you may want to customize it to your needs
-       */
-      var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-
-      return result * sortOrder;
-  }
-}
-
-//console.log(People.sort(dynamicSort("Name")))
-//console.log(People.sort(dynamicSort("Surname")));
-console.log(People.sort(dynamicSort("-Surname")));
+console.log(b)

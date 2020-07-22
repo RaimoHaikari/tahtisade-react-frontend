@@ -10,11 +10,23 @@ import SettingsHolder from "../Accordion"
 import ComparisonList from "../../components/SingleCritic/comparisonList";
 import ReviewsTable from "../../components/SingleCritic/reviewsTable";
 
+import Clapper from "../../components/Shared/clap";
+
+import useFullPageLoader from "../../hooks/useFullPageLoader";
+
 import criticService from '../../services/critics';
 
 import './singleCritic.css';
 
 const SingleCritic = () => {
+
+    /*
+     * Mitä muut ovat antatneet samoille elokuville,
+     * keneen vertaillaan
+     */ 
+    const defaultCompsetId = "muutKriitikot";
+
+    const [activeCompId, setActiveCompId] = useState(defaultCompsetId);
 
     const [data, setData] = useState({
 
@@ -24,16 +36,18 @@ const SingleCritic = () => {
 
     });
 
-    /*
-     * Mitä muut ovat antatneet samoille elokuville
-     */ 
-    const defaultCompsetId = "muutKriitikot";
+
     const [compset, setCompset] = useState([])
 
-
-
-
+    /*
+     * Talukossa esitettävien arvostelujen lajittelu
+     */
     const [sorting, setSorting] = useState({field: "", order: ""})
+
+    /*
+     * Latausanimaatio
+     */
+    const [loader, showLoader, hideLoader] = useFullPageLoader();
 
     /*
      * Kritiikkien taulukkomuotoinen esittäminen
@@ -55,11 +69,13 @@ const SingleCritic = () => {
      */
     const fetchCriticData = () => {
 
+        showLoader();
 
         criticService.getReviewerData(critcId)
             .then(critcData => {
 
-                console.log(critcData)
+                console.log(critcData);
+                hideLoader();
 
                 /*
                  * Liitetään oletusvertailusetti, eli mitä muut olivat keskimäärin
@@ -72,7 +88,7 @@ const SingleCritic = () => {
                 }));
 
                 setData({
-                    status: "ready",
+                    /* status: "ready",*/
                     reviews: critcData.reviews,
                     reviewerWithShardItems: critcData.reviewerWithShardItems                    
                 })
@@ -81,16 +97,36 @@ const SingleCritic = () => {
             })
             .catch(err => {
 
-                console.log("ei onnistunut")
+                hideLoader();
+
+                setData({
+                    ...data,
+                    status: "error",
+                })
 
             })
 
     }
 
+    /*
+     * Vertailuun valitun kriitikon dataa ei vielä löydy,
+     * haetaan se palvelimelta.
+     */
     const fetchCompData = (compId) => {
+
+        showLoader();
   
         criticService.getCompData(critcId, compId)
             .then(critcData => {
+
+                hideLoader();
+
+                setActiveCompId(compId);
+
+                setCompset(compset.concat({
+                    id: compId,
+                    reviews: Object.values(critcData)
+                }));
 
                 console.log(critcData)
 
@@ -105,13 +141,12 @@ const SingleCritic = () => {
                 }));
 
                 */
-
-
-
             })
             .catch(err => {
 
-                console.log("ei onnistunut")
+                hideLoader();
+
+                console.log(err.response)
 
             })      
     }
@@ -122,6 +157,20 @@ const SingleCritic = () => {
     const reviews = useMemo(() => {
 
         let computedReviews = data.reviews;
+
+        /*
+         * - elokuvat, jotka ovat myös vertailussa oleva arvostelija on arvostellut
+         */
+
+         if(compset.length > 0) {
+
+            let sharedMovies = compset
+                .filter(c => c.id === activeCompId)[0].reviews
+                .map(d => d.googleID);
+
+            computedReviews = computedReviews.filter(r => sharedMovies.includes( r.googleID));
+
+         }
 
         if(sorting.field){
 
@@ -146,7 +195,7 @@ const SingleCritic = () => {
 
         return computedReviews;
 
-    }, [data.reviews, sorting])
+    }, [data.reviews, sorting, compset])
 
     /*
      * myArray.map(function(e) { return e.hello; }).indexOf('stevie');
@@ -165,6 +214,54 @@ const SingleCritic = () => {
     }
 
     /*
+     * Valitaan tilan mukaan mitä tulostetaan.
+     */
+    const switchLayout = () => {
+
+        switch(data.status){
+
+            case "loading":
+                return(
+
+                    <Row>
+                        <Col className="singleMovie-col">
+                            <Clapper />
+                        </Col>
+                    </Row>
+
+                )
+            break;
+            default:
+                return(
+
+                    <Row className="tahtisade-singleCritic-row">
+
+                    <Col xs={2} className="tahtisade-singleCritic-col">
+                        <SettingsHolder>
+                            <ComparisonList 
+                                clickHandler = {selectCompHandler}
+                                data = {data.reviewerWithShardItems}
+                            />
+                        </SettingsHolder>
+                    </Col>
+    
+                    <Col className="tahtisade-singleCritic-col">
+                        <ReviewsTable 
+                            headers= {headers}
+                            reviews= {reviews}
+                            sortHandler = {tableSortingHandler}
+                        />
+                    </Col>
+    
+                    <Col xs={2} className="tahtisade-singleCritic-col">3 of 3</Col>
+                </Row>   
+
+                )
+        }
+
+    }
+
+    /*
      * Arvostelut sisältävän taulukon lajittelu
 
      const [sorting, setSorting] = useState({field: "", order: ""})
@@ -179,27 +276,8 @@ const SingleCritic = () => {
 
     return (
         <Container className="tahtisade-singleCritic-container">
-            <Row className="tahtisade-singleCritic-row">
-
-                <Col xs={2} className="tahtisade-singleCritic-col">
-                    <SettingsHolder>
-                        <ComparisonList 
-                            clickHandler = {selectCompHandler}
-                            data = {data.reviewerWithShardItems}
-                        />
-                    </SettingsHolder>
-                </Col>
-
-                <Col className="tahtisade-singleCritic-col">
-                    <ReviewsTable 
-                        headers= {headers}
-                        reviews= {reviews}
-                        sortHandler = {tableSortingHandler}
-                    />
-                </Col>
-
-                <Col xs={2} className="tahtisade-singleCritic-col">3 of 3</Col>
-            </Row>
+            {switchLayout()}
+            {loader}
         </Container>
     );
 }
