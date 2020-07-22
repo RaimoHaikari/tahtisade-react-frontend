@@ -1,5 +1,10 @@
 import React, {useState, useEffect, useMemo}  from 'react';
 
+import _ from 'lodash';
+import merge from 'lodash/merge';
+import keyBy from 'lodash/keyBy';
+import values from 'lodash/values';
+
 import {useParams} from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
@@ -33,7 +38,6 @@ const SingleCritic = () => {
         status: "loading",
         reviewerWithShardItems: [],
         reviews: []
-
     });
 
 
@@ -50,6 +54,13 @@ const SingleCritic = () => {
     const [loader, showLoader, hideLoader] = useFullPageLoader();
 
     /*
+     * dummy-muuttuja, jonka avulla saadaan sisältö päivittymään tilanteessa,
+     * jossa vertailuun haetan sellaisen kriitkon aineisto, joka löytyy muistista
+     * jo entuudestaan.
+     */
+    const [counter, setCounter] = useState(0);
+
+    /*
      * Kritiikkien taulukkomuotoinen esittäminen
      */ 
     const ITEMS_PER_PAGE = 20;
@@ -58,11 +69,37 @@ const SingleCritic = () => {
         { name: "No#", field: "id", sortable: false },
         { name: "Elokuva", field: "elokuvanNimi", sortable: true },
         { name: "Tähdet", field: "stars", sortable: true },
-        { name: "Lähde", field: "link", sortable: false }
+        { name: "Lähde", field: "link", sortable: false },
+        { name: "Vertailu", field: "compStars", sortable: true },
     ]
 
-
     let critcId = useParams().id;
+
+    /*
+     * Palatutetaan vertailussa esitettävät arvostelut
+     * - nimetään samalla stars -ominaisuus uudelleen, koska
+     *   aktiivinen arvostelusetti sisältää samannimisen
+     *   muuttuja.
+     * 
+     */
+    const getCompset = () => {
+
+        let val = [];
+
+        if(compset.length > 0 ){
+            val = compset
+                .filter(c => c.id === activeCompId)[0].reviews
+                .map(m => {
+                    return {
+                      googleID: m.googleID,
+                      compStars: m.stars
+                    }
+                  })
+        }
+
+        return val;
+
+    }
 
     /*
      * Ladataan arvosteluista koottu yhteenveto
@@ -128,19 +165,8 @@ const SingleCritic = () => {
                     reviews: Object.values(critcData)
                 }));
 
-                console.log(critcData)
+                //console.log(critcData)
 
-                /*
-                 * Liitetään oletusvertailusetti, eli mitä muut olivat keskimäärin
-                 * antaneet niille elokuville, joita aktiivinen kriitikko oli 
-                 * arvostellut.
-                 
-                setCompset(compset.concat({
-                    id: defaultCompsetId,
-                    reviews: critcData.defCompSet
-                }));
-
-                */
             })
             .catch(err => {
 
@@ -161,15 +187,20 @@ const SingleCritic = () => {
         /*
          * - elokuvat, jotka ovat myös vertailussa oleva arvostelija on arvostellut
          */
-
          if(compset.length > 0) {
 
-            let sharedMovies = compset
-                .filter(c => c.id === activeCompId)[0].reviews
-                .map(d => d.googleID);
+            // - yhteiset elokuvat
+            const sharedMovies = getCompset();
 
-            computedReviews = computedReviews.filter(r => sharedMovies.includes( r.googleID));
+            // - yhteisten elokuvien id-tunnukset
+            const sharedIds = sharedMovies.map(d => d.googleID);
 
+            // - tiputetaan aktiiviselta riitikolta "ylimääräiset elokuvat pois"
+            computedReviews = computedReviews.filter(r => sharedIds.includes( r.googleID));
+
+            // - liitetään vertailtavan kriitikon antamat arvosanat mukaan
+            var merged = _.merge(_.keyBy(computedReviews, 'googleID'), _.keyBy(sharedMovies, 'googleID'));
+            computedReviews = _.values(merged);
          }
 
         if(sorting.field){
@@ -195,7 +226,7 @@ const SingleCritic = () => {
 
         return computedReviews;
 
-    }, [data.reviews, sorting, compset])
+    }, [data.reviews, sorting, compset, counter])
 
     /*
      * myArray.map(function(e) { return e.hello; }).indexOf('stevie');
@@ -210,6 +241,10 @@ const SingleCritic = () => {
         if(x !== 0) {
             console.log("Pitäs hakea täydennystä");
             fetchCompData(val)
+        }
+        else {
+            setActiveCompId(val);
+            setCounter(counter+1);
         }
     }
 

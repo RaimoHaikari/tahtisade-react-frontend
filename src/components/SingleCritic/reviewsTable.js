@@ -33,6 +33,7 @@ const ReviewsTable = (({headers, reviews, sortHandler}) => {
                             </td>
                             <td>{review.stars}</td>
                             <td>{review.link}</td>
+                            <td>{review.compStars}</td>
                         </tr>
                     )
                 })

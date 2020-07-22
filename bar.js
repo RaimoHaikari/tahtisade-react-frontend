@@ -1,3 +1,5 @@
+let _ = require('lodash');
+
 reviews = [
   {
     "criticID": "päiviValotie",
@@ -74,7 +76,7 @@ reviews = [
   {
     "criticID": "päiviValotie",
     "googleID": 3,
-    "stars": 3,
+    "stars": 5,
     "link": "Turun Sanomat 7.2.2020",
     "publisher": "Turun Sanomat",
     "name": "Päivi Valotie",
@@ -101,7 +103,7 @@ reviews = [
   {
     "criticID": "päiviValotie",
     "googleID": 2,
-    "stars": 3,
+    "stars": 1,
     "link": "Turun Sanomat 6.3.2020",
     "publisher": "Turun Sanomat",
     "name": "Päivi Valotie",
@@ -132,20 +134,20 @@ let compset = [
     "id": "muutKriitikot",
     "reviews": [
       {
-        "googleID": 1,
-        "count": 4,
-        "stars": 3.5
-      },
-      {
         "googleID": 2,
         "count": 2,
-        "stars": 3.5
+        "stars": 0.5
       },
       {
         "googleID": 3,
         "count": 4,
         "stars": 2.75
-      }
+      },
+      {
+        "googleID": 1,
+        "count": 4,
+        "stars": 3.5
+      },
     ]
   },
   {
@@ -161,11 +163,42 @@ let compset = [
 ]
 
 let activeCompsetId = "muutKriitikot"
-
-let sharedMovies = compset
+ 
+let compMovies = compset
   .filter(c => c.id === activeCompsetId)[0].reviews
+  .map(m => {
+    return {
+      googleID: m.googleID,
+      compStars: m.stars
+    }
+  })
+
+let sharedMovies = compMovies
   .map(d => d.googleID);
 
-let b = reviews.filter(r => sharedMovies.includes( r.googleID));
+let bee = reviews.filter(r => sharedMovies.includes( r.googleID));
 
-console.log(b)
+console.log(bee)
+console.log(compMovies)
+
+var merged = _.merge(_.keyBy(bee, 'googleID'), _.keyBy(compMovies, 'googleID'));
+var values = _.values(merged);
+console.log(values)
+/*
+
+var a = [
+  { userId:"p1", item:1},
+  { userId:"p2", item:2},
+  { userId:"p3", item:4}
+];
+
+var b = [
+  { userId:"p1", profile:1},
+  { userId:"p2", profile:2},
+  { userId:"p4", profile:4}
+];
+
+var merged = _.merge(_.keyBy(a, 'userId'), _.keyBy(b, 'userId'));
+var values = _.values(merged);
+//console.log(values);
+*/
