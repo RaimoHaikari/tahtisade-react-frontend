@@ -1,8 +1,5 @@
 import React from 'react';
 
-import Basics from '../../components/D3/Basics'
-
-
 /*
          <Sivupohja>
             Hei
@@ -12,7 +9,7 @@ const About = (props) => {
 
     return(
         <>
-            <Basics />
+            <p>Tilu lilu</p>
         </>
     )
 }

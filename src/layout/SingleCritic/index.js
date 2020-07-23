@@ -15,6 +15,9 @@ import SettingsHolder from "../Accordion"
 import ComparisonList from "../../components/SingleCritic/ComparisonList";
 import ReviewsTable from "../../components/SingleCritic/reviewsTable";
 
+import Basics from "../../components/D3/Basics"
+import CurvedLineChart from "../../components/D3/CurvedLineChart" 
+
 import Clapper from "../../components/Shared/clap";
 
 import useFullPageLoader from "../../hooks/useFullPageLoader";
@@ -37,7 +40,8 @@ const SingleCritic = () => {
 
         status: "loading",
         reviewerWithShardItems: [],
-        reviews: []
+        reviews: [],
+        name: ""
     });
 
 
@@ -90,7 +94,7 @@ const SingleCritic = () => {
         criticService.getReviewerData(critcId)
             .then(critcData => {
 
-                console.log(critcData.reviewerWithShardItems);
+                console.log(critcData);
                 hideLoader();
 
                 /*
@@ -110,10 +114,12 @@ const SingleCritic = () => {
                     })
                 })
 
+            
                 setData({
                     /* status: "ready",*/
                     reviews: critcData.reviews,
-                    reviewerWithShardItems: critcData.reviewerWithShardItems                    
+                    reviewerWithShardItems: getUpdatedCompList(defaultCompsetId, critcData.reviewerWithShardItems),
+                    name: critcData.reviewerData.name           
                 })
 
 
@@ -152,6 +158,11 @@ const SingleCritic = () => {
                 }));
 
                 setHeaders(getUpdatedHeaders(compId));
+
+                setData({
+                    ...data,
+                    reviewerWithShardItems: getUpdatedCompList(compId)
+                })
             })
             .catch(err => {
 
@@ -187,6 +198,27 @@ const SingleCritic = () => {
 
         return val;
 
+    }
+
+    /*
+     * Päivitetään vertailulista nimet
+     * - vertailtavan active -ominaisuus saa arvon true,
+     *   kun muilla em. ominaisuus on false
+     */
+    const getUpdatedCompList = (val, list=null) => {
+
+        let n = list === null?data.reviewerWithShardItems:list;
+
+        n = n
+            .map(d =>  {
+                return({
+                    ...d,
+                    active: d.id===val?true:false
+                })
+
+            })
+
+        return n;
     }
 
     /*
@@ -275,9 +307,6 @@ const SingleCritic = () => {
             .map(c => c.id)
             .indexOf(val);
 
-        let n = data.reviewerWithShardItems
-            .filter(d => d.id === val)[0]
-
         // Löytyykö entuudestaan
         if(x !== 0) {
             fetchCompData(val)
@@ -285,6 +314,11 @@ const SingleCritic = () => {
         else {
             setActiveCompId(val);
             setHeaders(getUpdatedHeaders(val));
+
+            setData({
+                ...data,
+                reviewerWithShardItems: getUpdatedCompList(val)
+            })
         }
     }
 
@@ -308,8 +342,11 @@ const SingleCritic = () => {
             break;
             default:
                 return(
+                    <>
 
-                    <Row className="tahtisade-singleCritic-row">
+                <h3>{data.name}</h3>
+
+                <Row className="tahtisade-singleCritic-row">
 
                     <Col xs={2} className="tahtisade-singleCritic-col">
                         <SettingsHolder>
@@ -328,9 +365,12 @@ const SingleCritic = () => {
                         />
                     </Col>
     
-                    <Col xs={2} className="tahtisade-singleCritic-col">3 of 3</Col>
+                    <Col xs={3} className="tahtisade-singleCritic-col">
+                        <CurvedLineChart />
+                    </Col>
                 </Row>   
 
+</>
                 )
         }
 
