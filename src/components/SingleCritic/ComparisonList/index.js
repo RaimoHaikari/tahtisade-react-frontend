@@ -9,6 +9,8 @@ import ListGroup from "react-bootstrap/ListGroup";
  */
 const ComparisonList = ({data, clickHandler}) => {
 
+    console.log(data)
+
     /*
                         <div>
                             {d.name} 
@@ -21,13 +23,14 @@ const ComparisonList = ({data, clickHandler}) => {
         <ListGroup>
             {
                 data.map(d => {
-                    let shared = d.count===1?`${d.count} yhteinen arvostelu`:`${d.count} yhteistä arvostelua`
+                    let shared = d.count===1?`${d.count} yhteinen arvostelu`:`${d.count} yhteistä arvostelua`;
+                    let cName = (d.active!==true)?"tahtisade-criticPage-list-group-item":"tahtisade-criticPage-list-group-item tahtisade-criticPage-list-group-itemActive";
 
                     return (
                     <ListGroup.Item 
                         key={d.id}
                         onClick={() => clickHandler(d.id)}
-                        className="tahtisade-criticPage-list-group-item"
+                        className={cName}
                     >
                         {d.name} 
                         <br />

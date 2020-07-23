@@ -12,7 +12,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import SettingsHolder from "../Accordion"
-import ComparisonList from "../../components/SingleCritic/comparisonList";
+import ComparisonList from "../../components/SingleCritic/ComparisonList";
 import ReviewsTable from "../../components/SingleCritic/reviewsTable";
 
 import Clapper from "../../components/Shared/clap";
@@ -44,6 +44,17 @@ const SingleCritic = () => {
     const [compset, setCompset] = useState([])
 
     /*
+     * Taulukon otsikkosarake
+     */
+    const [headers, setHeaders] = useState([
+        { name: "No#", field: "id", sortable: false },
+        { name: "Elokuva", field: "elokuvanNimi", sortable: true },
+        { name: "Tähdet", field: "stars", sortable: true },
+        { name: "Lähde", field: "link", sortable: false },
+        { name: "Muut", field: "compStars", sortable: true },
+    ])
+
+    /*
      * Talukossa esitettävien arvostelujen lajittelu
      */
     const [sorting, setSorting] = useState({field: "", order: ""})
@@ -52,6 +63,8 @@ const SingleCritic = () => {
      * Latausanimaatio
      */
     const [loader, showLoader, hideLoader] = useFullPageLoader();
+
+
 
     /*
      * dummy-muuttuja, jonka avulla saadaan sisältö päivittymään tilanteessa,
@@ -65,41 +78,7 @@ const SingleCritic = () => {
      */ 
     const ITEMS_PER_PAGE = 20;
 
-    const headers = [
-        { name: "No#", field: "id", sortable: false },
-        { name: "Elokuva", field: "elokuvanNimi", sortable: true },
-        { name: "Tähdet", field: "stars", sortable: true },
-        { name: "Lähde", field: "link", sortable: false },
-        { name: "Vertailu", field: "compStars", sortable: true },
-    ]
-
     let critcId = useParams().id;
-
-    /*
-     * Palatutetaan vertailussa esitettävät arvostelut
-     * - nimetään samalla stars -ominaisuus uudelleen, koska
-     *   aktiivinen arvostelusetti sisältää samannimisen
-     *   muuttuja.
-     * 
-     */
-    const getCompset = () => {
-
-        let val = [];
-
-        if(compset.length > 0 ){
-            val = compset
-                .filter(c => c.id === activeCompId)[0].reviews
-                .map(m => {
-                    return {
-                      googleID: m.googleID,
-                      compStars: m.stars
-                    }
-                  })
-        }
-
-        return val;
-
-    }
 
     /*
      * Ladataan arvosteluista koottu yhteenveto
@@ -111,7 +90,7 @@ const SingleCritic = () => {
         criticService.getReviewerData(critcId)
             .then(critcData => {
 
-                console.log(critcData);
+                console.log(critcData.reviewerWithShardItems);
                 hideLoader();
 
                 /*
@@ -123,6 +102,13 @@ const SingleCritic = () => {
                     id: defaultCompsetId,
                     reviews: critcData.defCompSet
                 }));
+
+                critcData.reviewerWithShardItems = critcData.reviewerWithShardItems.map(r => {
+                    return({
+                        ...r,
+                        active: false
+                    })
+                })
 
                 setData({
                     /* status: "ready",*/
@@ -165,8 +151,7 @@ const SingleCritic = () => {
                     reviews: Object.values(critcData)
                 }));
 
-                //console.log(critcData)
-
+                setHeaders(getUpdatedHeaders(compId));
             })
             .catch(err => {
 
@@ -176,6 +161,57 @@ const SingleCritic = () => {
 
             })      
     }
+
+
+    /*
+     * Palatutetaan vertailussa esitettävät arvostelut
+     * - nimetään samalla stars -ominaisuus uudelleen, koska
+     *   aktiivinen arvostelusetti sisältää samannimisen
+     *   muuttuja.
+     * 
+     */
+    const getCompset = () => {
+
+        let val = [];
+
+        if(compset.length > 0 ){
+            val = compset
+                .filter(c => c.id === activeCompId)[0].reviews
+                .map(m => {
+                    return {
+                      googleID: m.googleID,
+                      compStars: m.stars
+                    }
+                  })
+        }
+
+        return val;
+
+    }
+
+    /*
+     * Arvosanat listaavan otsikkorivi päivitettynä vertailuun valitun kriitikon 
+     * nimellä.
+     */
+    const getUpdatedHeaders = (val) => {
+
+        let n = data.reviewerWithShardItems
+            .filter(d => d.id === val)[0].name;
+
+        let h = headers.map(h => {
+            if(h.field === "compStars"){
+                return {
+                    ...h,
+                    name: n
+                }
+            }
+
+            return h;
+        })
+
+        return h;
+    }
+
 
     /*
      *
@@ -226,25 +262,29 @@ const SingleCritic = () => {
 
         return computedReviews;
 
-    }, [data.reviews, sorting, compset, counter])
+    }, [data.reviews, sorting, compset, headers]);
+
+
 
     /*
      * myArray.map(function(e) { return e.hello; }).indexOf('stevie');
      */
     const selectCompHandler = (val) => {
-        // Löytyykö entuudestaan
 
         let x = compset
             .map(c => c.id)
             .indexOf(val);
 
+        let n = data.reviewerWithShardItems
+            .filter(d => d.id === val)[0]
+
+        // Löytyykö entuudestaan
         if(x !== 0) {
-            console.log("Pitäs hakea täydennystä");
             fetchCompData(val)
         }
         else {
             setActiveCompId(val);
-            setCounter(counter+1);
+            setHeaders(getUpdatedHeaders(val));
         }
     }
 

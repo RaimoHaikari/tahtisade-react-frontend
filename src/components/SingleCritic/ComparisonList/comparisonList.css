@@ -3,6 +3,15 @@
     cursor: pointer
 }
 
+.tahtisade-criticPage-list-group-itemActive {
+    background-color: #0e094e!important;
+    color: #fff; 
+}
+
+.tahtisade-criticPage-list-group-itemActive > .tahtisade-criticPage-text-muted{
+    color: #fff;
+}
+
 .tahtisade-criticPage-text-muted {
     color: #6c757d;
 }

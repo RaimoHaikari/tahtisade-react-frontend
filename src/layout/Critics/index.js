@@ -233,7 +233,7 @@ const Critics = () => {
                                             {index + 1}
                                         </th>
                                         <td>
-                                            <Link to={`critics/${item.id}`}>
+                                            <Link to={`/critics/${item.id}`}>
                                                 {item.name}
                                             </Link>
                                         </td>
