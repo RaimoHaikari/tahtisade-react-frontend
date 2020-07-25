@@ -17,6 +17,7 @@ import ReviewsTable from "../../components/SingleCritic/reviewsTable";
 
 import Basics from "../../components/D3/Basics"
 import CurvedLineChart from "../../components/D3/CurvedLineChart" 
+import Donut from "../../components/D3/Donut";
 
 import Clapper from "../../components/Shared/clap";
 
@@ -62,6 +63,17 @@ const SingleCritic = () => {
      * Talukossa esitettävien arvostelujen lajittelu
      */
     const [sorting, setSorting] = useState({field: "", order: ""})
+
+    /*
+     * Osuudet kuinka monelle elokuvalle:
+     * - aktiivinen kriitittko on antanut paremman arvosanan
+     * - vertailussa oleva kriitikko on antanut paremman arvosanan..
+     */
+    const [shares, setShares] = useState([
+        {val: "Parempi", lkm: 0, ids:[]},	// Arvostelia antoi paremman arvosanan kuin...
+        {val: "Sama", lkm: 0, ids:[]},
+        {val: "Huonompi", lkm: 0, ids:[]}       
+    ])
 
     /*
      * Latausanimaatio
@@ -114,14 +126,12 @@ const SingleCritic = () => {
                     })
                 })
 
-            
                 setData({
                     /* status: "ready",*/
                     reviews: critcData.reviews,
                     reviewerWithShardItems: getUpdatedCompList(defaultCompsetId, critcData.reviewerWithShardItems),
                     name: critcData.reviewerData.name           
                 })
-
 
             })
             .catch(err => {
@@ -163,6 +173,7 @@ const SingleCritic = () => {
                     ...data,
                     reviewerWithShardItems: getUpdatedCompList(compId)
                 })
+
             })
             .catch(err => {
 
@@ -198,6 +209,118 @@ const SingleCritic = () => {
 
         return val;
 
+    }
+
+    /*
+     * Karsitaan aktiivisen kriitikon elokuva listalle ne elokuvat, joita myös
+     * vertailussa mukana oleva kriitikko on arvostellut
+     * 
+     * @param revs aktiivisen arvostelijan antamat arvosanat. 
+     *             Siltä varalta, että listaa olisi jo suodatettu
+     *             välitetään vallitseva tilanne parametrinä
+     */
+    const getMoviesReviewedByBoth = (revs) => {
+        // - yhteiset elokuvat
+        const sharedMovies = getCompset();
+
+        // - yhteisten elokuvien id-tunnukset
+        const sharedIds = sharedMovies.map(d => d.googleID);
+
+        // - tiputetaan aktiiviselta riitikolta "ylimääräiset elokuvat pois"
+        let prunedRevs = revs.filter(r => sharedIds.includes( r.googleID));
+
+        // - liitetään vertailtavan kriitikon antamat arvosanat mukaan
+        var merged = _.merge(_.keyBy(prunedRevs, 'googleID'), _.keyBy(sharedMovies, 'googleID'));
+
+        return _.values(merged);
+    }
+
+    /*
+     * Lasketaan taulukko, kuinka monelle elokuvalle arvostelija / vertailussa oleva kriitikko 
+     * on antanut paremman arvosana.
+     * data.reviews, sorting, compset, headers
+     */
+    const foobar = useMemo(() => {
+
+        let osuudet = [
+            {val: "Parempi", lkm: 0, ids:[]},	// Arvostelia antoi paremman arvosanan kuin...
+            {val: "Sama", lkm: 0, ids:[]},
+            {val: "Huonompi", lkm: 0, ids:[]}       
+        ]
+
+
+        /*
+         * - elokuvat, jotka ovat myös vertailussa oleva arvostelija on arvostellut
+         */
+         if(compset.length > 0) {
+            let movies = getMoviesReviewedByBoth(data.reviews);
+
+            
+            for(var i = 0; i < movies.length; i++){
+
+                let filmId = movies[i].googleID;
+                
+                let compGrade = Number(movies[i].compStars);
+                let actGrade = Number(movies[i].stars);
+                
+                //compGrade = Math.floor(compGrade) + Math.ceil(compGrade % 1)/2;
+                //actGrade = Math.floor(actGrade) +  Math.ceil(actGrade % 1)/2;
+                
+                if(actGrade > compGrade){
+                    osuudet[0].ids.push(filmId);
+                    osuudet[0].lkm += 1; 
+                }
+                else if(actGrade < compGrade){
+                    osuudet[2].ids.push(filmId);
+                    osuudet[2].lkm += 1;
+                }
+                else {
+                    osuudet[1].ids.push(filmId);
+                    osuudet[1].lkm += 1;
+                }
+            }
+
+         }
+
+        return osuudet;
+
+    }, [data.reviews, compset]);
+
+    const getShares = () => {
+
+        let osuudet = [
+            {val: "Parempi", lkm: 0, ids:[]},	// Arvostelia antoi paremman arvosanan kuin...
+            {val: "Sama", lkm: 0, ids:[]},
+            {val: "Huonompi", lkm: 0, ids:[]}       
+        ]
+
+        let movies = getMoviesReviewedByBoth(data.reviews);
+
+        for(var i = 0; i < movies.length; i++){
+
+            let filmId = movies[i].googleID;
+            
+            let compGrade = Number(movies[i].compStars);
+            let actGrade = Number(movies[i].stars);
+            
+            //compGrade = Math.floor(compGrade) + Math.ceil(compGrade % 1)/2;
+            //actGrade = Math.floor(actGrade) +  Math.ceil(actGrade % 1)/2;
+            
+            if(actGrade > compGrade){
+                osuudet[0].ids.push(filmId);
+                osuudet[0].lkm += 1; 
+            }
+            else if(actGrade < compGrade){
+                osuudet[2].ids.push(filmId);
+                osuudet[2].lkm += 1;
+            }
+            else {
+                osuudet[1].ids.push(filmId);
+                osuudet[1].lkm += 1;
+            }
+        }
+
+        return osuudet;
     }
 
     /*
@@ -256,7 +379,8 @@ const SingleCritic = () => {
          * - elokuvat, jotka ovat myös vertailussa oleva arvostelija on arvostellut
          */
          if(compset.length > 0) {
-
+            computedReviews = getMoviesReviewedByBoth(computedReviews)
+            /*
             // - yhteiset elokuvat
             const sharedMovies = getCompset();
 
@@ -269,6 +393,7 @@ const SingleCritic = () => {
             // - liitetään vertailtavan kriitikon antamat arvosanat mukaan
             var merged = _.merge(_.keyBy(computedReviews, 'googleID'), _.keyBy(sharedMovies, 'googleID'));
             computedReviews = _.values(merged);
+            */
          }
 
         if(sorting.field){
@@ -366,7 +491,9 @@ const SingleCritic = () => {
                     </Col>
     
                     <Col xs={3} className="tahtisade-singleCritic-col">
-                        <CurvedLineChart />
+                        <Donut 
+                            osuudet = {foobar}
+                        />
                     </Col>
                 </Row>   
 
@@ -378,6 +505,8 @@ const SingleCritic = () => {
 
     /*
      * Arvostelut sisältävän taulukon lajittelu
+
+
 
      const [sorting, setSorting] = useState({field: "", order: ""})
      */
