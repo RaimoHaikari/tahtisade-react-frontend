@@ -16,8 +16,9 @@ import ComparisonList from "../../components/SingleCritic/ComparisonList";
 import ReviewsTable from "../../components/SingleCritic/reviewsTable";
 
 import Basics from "../../components/D3/Basics"
-import CurvedLineChart from "../../components/D3/CurvedLineChart" 
-import Donut from "../../components/D3/Donut";
+import CurvedLineChart from "../../components/D3/CurvedLineChart";
+import BarChart from "../../components/D3/BarChart";
+//import Donut from "../../components/D3/Donut";
 
 import Clapper from "../../components/Shared/clap";
 
@@ -88,6 +89,11 @@ const SingleCritic = () => {
      * jo entuudestaan.
      */
     const [counter, setCounter] = useState(0);
+
+    /*
+     * D3 BarChart data....
+     */
+    const [bcData, setBcData] = useState([25,30,45,60,10,65,75])
 
     /*
      * Kritiikkien taulukkomuotoinen esittäminen
@@ -490,10 +496,11 @@ const SingleCritic = () => {
                         />
                     </Col>
     
-                    <Col xs={3} className="tahtisade-singleCritic-col">
-                        <Donut 
-                            osuudet = {foobar}
+                    <Col xs={4} className="tahtisade-singleCritic-col">
+                        <BarChart 
+                            data={bcData}
                         />
+
                     </Col>
                 </Row>   
 
@@ -504,7 +511,13 @@ const SingleCritic = () => {
     }
 
     /*
-     * Arvostelut sisältävän taulukon lajittelu
+     * 
+                         <Donut 
+                            osuudet = {foobar}
+                        />
+
+     
+     Arvostelut sisältävän taulukon lajittelu
 
 
 
