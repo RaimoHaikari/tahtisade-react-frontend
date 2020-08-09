@@ -1,13 +1,27 @@
 import React, {useRef, useEffect, useState} from 'react';
 
-import './aDonut.css';
+import './aReusableDonut.css';
 
-import D3Donut from './d3Donut';
+import ReusableD3Donut from './aReusableDonut';
 
 let vis;
 
 /*
- *
+
+         width,
+        height,
+        margin = {top: 10, right: 10, bottom: 10, left: 10},
+        colour = d3.scaleOrdinal(d3.schemeCategory20c), // colour scheme
+        variable, // value in data that will dictate proportions on chart
+        category, // compare data by
+        padAngle, // effectively dictates the gap between slices
+        transTime, // transition time
+        updateData,
+        floatFormat = d3.format('.4r'),
+        cornerRadius, // sets how rounded the corners are on each slice
+        percentFormat = d3.format(',.2%');
+
+
  */
 export default function ReactComponent({data, sata, options, handler}){
 
@@ -17,10 +31,14 @@ export default function ReactComponent({data, sata, options, handler}){
     const [padAngle, setPadAngle] = useState(0.015);    // effectively dictates the gap between slices
     const [variable, setVariable] = useState('Probability');    
     const [category, setCategory] = useState('Species');
+    const [transTime, setTranstime] = useState(750)
 
 
     const refElement = useRef(null);
 
+    /*
+     * Alustetaan d3 komponentti
+     */ 
     function initVis() {
         
         if(data && data.length) {
@@ -31,11 +49,12 @@ export default function ReactComponent({data, sata, options, handler}){
                 height,
                 cornerRadius,
                 padAngle,
+                transTime,
                 variable,
                 category
             };
             
-            vis = new D3Donut(refElement.current, d3Props);
+            vis = new ReusableD3Donut(refElement.current, d3Props);
         }
         
     }
@@ -52,7 +71,6 @@ export default function ReactComponent({data, sata, options, handler}){
     useEffect(() => {   
 
         if(sata){
-            console.log("Data vaihtu")
             vis && vis.updateData(sata)
         }
 
@@ -62,14 +80,6 @@ export default function ReactComponent({data, sata, options, handler}){
         <div className='reusable-donut'>
 
             <div ref={refElement}></div>
-
-            <div>
-                <button 
-                    onClick={() => clickHanler()}
-                >
-                    Sisäinen 
-                </button>
-            </div>
 
             <div>
                 <button 
