@@ -24,6 +24,7 @@ const FrontPageMovies = (props) => {
     });
 
     const backdropClickHandler = () => {
+
         const newItems = {
             ...items,
             showModal: false,
@@ -54,6 +55,8 @@ const FrontPageMovies = (props) => {
         movieService
             .getFrontPageMovies()
             .then(data => {
+
+                console.log(data)
 
 
                 const newItems = {
@@ -128,6 +131,8 @@ console.log("............................");
                 {items.showModal === true && <FrontPageMovieDetails 
                     title={items.activeMovie?items.activeMovie.nimi:''}
                     ensiIlta={items.activeMovie?items.activeMovie.ensiIlta:''}
+                    average={items.activeMovie?items.activeMovie.average:0}
+                    total={items.activeMovie?items.activeMovie.total:0} 
                     />
                 }
 
