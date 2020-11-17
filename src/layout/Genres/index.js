@@ -14,10 +14,12 @@ const Genres = () => {
     const [sorting, setSorting] = useState({field: "", order: ""})
 
 
-    const ITEMS_PER_PAGE = 5;
+    const ITEMS_PER_PAGE = 10;
 
+    /*
+     * { name: "No#", field: "id", sortable: false },
+     */
     const headers = [
-        { name: "No#", field: "id", sortable: false },
         { name: "Nimi", field: "genre", sortable: true },
         { name: "Keskiarvo", field: "numberOfMovies", sortable: true },
         { name: "Elokuvien määrä", field: "numberOfReviews", sortable: false },
@@ -121,6 +123,17 @@ const Genres = () => {
 
     /*
      * <CoinTable sortBy={sortHandler} data={genres.genres} />
+
+                                         <tr key={g.id}>
+                                        <th scope="row1">
+                                            {g.id}
+                                        </th>
+                                        <td>{g.genre}</td>
+                                        <td>{g.starsAverage}</td>
+                                        <td>{g.numberOfMovies}</td>
+                                        <td>{g.numberOfReviews}</td>
+                                    </tr>
+
      */
     return (
         <>
@@ -163,13 +176,10 @@ const Genres = () => {
                             genresData.map(g => {
                                 return(
                                     <tr key={g.id}>
-                                        <th scope="row1">
-                                            {g.id}
-                                        </th>
-                                        <td>{g.genre}</td>
+                                        <th scope="row1">{g.genre}</th>
+                                        <td>{g.starsAverage}</td>
                                         <td>{g.numberOfMovies}</td>
                                         <td>{g.numberOfReviews}</td>
-                                        <td>{g.starsAverage}</td>
                                     </tr>
                                 )
                             })
