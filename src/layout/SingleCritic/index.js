@@ -15,10 +15,7 @@ import SettingsHolder from "../Accordion"
 import ComparisonList from "../../components/SingleCritic/ComparisonList";
 import ReviewsTable from "../../components/SingleCritic/reviewsTable";
 
-import Basics from "../../components/D3/Basics"
-import CurvedLineChart from "../../components/D3/CurvedLineChart";
-import BarChart from "../../components/D3/BarChart";
-//import Donut from "../../components/D3/Donut";
+import ReusableD3Donut from "../../components/D3/aReusableDonut"
 
 import Clapper from "../../components/Shared/clap";
 
@@ -81,7 +78,15 @@ const SingleCritic = () => {
      */
     const [loader, showLoader, hideLoader] = useFullPageLoader();
 
-
+    /*
+     * Piirakalta aktivoitujen elokuvien id-tunnukset
+     *
+     * - piirakka esittää vertailun kuinka monelle elokuvalle aktiivinen arvostelija
+     *   antoi vähemmän, enemmän, yhtä monta tähteä .. kuin vertailtava arvostelija
+     *   Jos jokin näistä sektoreista aktivoidaan, suodatetaan näkyville vain niiden
+     *   elokuvien tiedot
+     */
+    const [emphasizedMovies, setEmphasizedMovies] = useState([])
 
     /*
      * dummy-muuttuja, jonka avulla saadaan sisältö päivittymään tilanteessa,
@@ -89,11 +94,6 @@ const SingleCritic = () => {
      * jo entuudestaan.
      */
     const [counter, setCounter] = useState(0);
-
-    /*
-     * D3 BarChart data....
-     */
-    const [bcData, setBcData] = useState([25,30,45,60,10,65,75])
 
     /*
      * Kritiikkien taulukkomuotoinen esittäminen
@@ -112,7 +112,6 @@ const SingleCritic = () => {
         criticService.getReviewerData(critcId)
             .then(critcData => {
 
-                console.log(critcData);
                 hideLoader();
 
                 /*
@@ -180,6 +179,8 @@ const SingleCritic = () => {
                     reviewerWithShardItems: getUpdatedCompList(compId)
                 })
 
+                setEmphasizedMovies([])
+
             })
             .catch(err => {
 
@@ -192,7 +193,7 @@ const SingleCritic = () => {
 
 
     /*
-     * Palatutetaan vertailussa esitettävät arvostelut
+     * Palatutetaan vertailuun valitun kriitikon antamat arvostelut
      * - nimetään samalla stars -ominaisuus uudelleen, koska
      *   aktiivinen arvostelusetti sisältää samannimisen
      *   muuttuja.
@@ -226,16 +227,20 @@ const SingleCritic = () => {
      *             välitetään vallitseva tilanne parametrinä
      */
     const getMoviesReviewedByBoth = (revs) => {
+
         // - yhteiset elokuvat
         const sharedMovies = getCompset();
-
+ 
         // - yhteisten elokuvien id-tunnukset
         const sharedIds = sharedMovies.map(d => d.googleID);
 
         // - tiputetaan aktiiviselta riitikolta "ylimääräiset elokuvat pois"
         let prunedRevs = revs.filter(r => sharedIds.includes( r.googleID));
 
-        // - liitetään vertailtavan kriitikon antamat arvosanat mukaan
+        /*
+         * liitetään vertailtavan kriitikon antamat arvosanat mukaan,
+         * ts. "lisätään vertailtavat omaan sarakkeeseen"
+         */
         var merged = _.merge(_.keyBy(prunedRevs, 'googleID'), _.keyBy(sharedMovies, 'googleID'));
 
         return _.values(merged);
@@ -246,7 +251,7 @@ const SingleCritic = () => {
      * on antanut paremman arvosana.
      * data.reviews, sorting, compset, headers
      */
-    const foobar = useMemo(() => {
+    const getShares = useMemo(() => {
 
         let osuudet = [
             {val: "Parempi", lkm: 0, ids:[]},	// Arvostelia antoi paremman arvosanan kuin...
@@ -254,13 +259,11 @@ const SingleCritic = () => {
             {val: "Huonompi", lkm: 0, ids:[]}       
         ]
 
-
         /*
          * - elokuvat, jotka ovat myös vertailussa oleva arvostelija on arvostellut
          */
          if(compset.length > 0) {
             let movies = getMoviesReviewedByBoth(data.reviews);
-
             
             for(var i = 0; i < movies.length; i++){
 
@@ -290,49 +293,15 @@ const SingleCritic = () => {
 
         return osuudet;
 
-    }, [data.reviews, compset]);
+    }, [data.reviewerWithShardItems]);
 
-    const getShares = () => {
-
-        let osuudet = [
-            {val: "Parempi", lkm: 0, ids:[]},	// Arvostelia antoi paremman arvosanan kuin...
-            {val: "Sama", lkm: 0, ids:[]},
-            {val: "Huonompi", lkm: 0, ids:[]}       
-        ]
-
-        let movies = getMoviesReviewedByBoth(data.reviews);
-
-        for(var i = 0; i < movies.length; i++){
-
-            let filmId = movies[i].googleID;
-            
-            let compGrade = Number(movies[i].compStars);
-            let actGrade = Number(movies[i].stars);
-            
-            //compGrade = Math.floor(compGrade) + Math.ceil(compGrade % 1)/2;
-            //actGrade = Math.floor(actGrade) +  Math.ceil(actGrade % 1)/2;
-            
-            if(actGrade > compGrade){
-                osuudet[0].ids.push(filmId);
-                osuudet[0].lkm += 1; 
-            }
-            else if(actGrade < compGrade){
-                osuudet[2].ids.push(filmId);
-                osuudet[2].lkm += 1;
-            }
-            else {
-                osuudet[1].ids.push(filmId);
-                osuudet[1].lkm += 1;
-            }
-        }
-
-        return osuudet;
-    }
 
     /*
-     * Päivitetään vertailulista nimet
+     * Päivitetään vertailulistan nimet
      * - vertailtavan active -ominaisuus saa arvon true,
      *   kun muilla em. ominaisuus on false
+     * - ensimmäisellä kerralla funktiota kutsutaan ennen data:n asettamista, josta syystä
+     *   arvostelijalista välitetään funktiokutsun parametrinä
      */
     const getUpdatedCompList = (val, list=null) => {
 
@@ -386,21 +355,15 @@ const SingleCritic = () => {
          */
          if(compset.length > 0) {
             computedReviews = getMoviesReviewedByBoth(computedReviews)
-            /*
-            // - yhteiset elokuvat
-            const sharedMovies = getCompset();
-
-            // - yhteisten elokuvien id-tunnukset
-            const sharedIds = sharedMovies.map(d => d.googleID);
-
-            // - tiputetaan aktiiviselta riitikolta "ylimääräiset elokuvat pois"
-            computedReviews = computedReviews.filter(r => sharedIds.includes( r.googleID));
-
-            // - liitetään vertailtavan kriitikon antamat arvosanat mukaan
-            var merged = _.merge(_.keyBy(computedReviews, 'googleID'), _.keyBy(sharedMovies, 'googleID'));
-            computedReviews = _.values(merged);
-            */
          }
+
+         /*
+          * - karsitaan lista tarvittaessa donitsilta valittun ryhmän edustajiin
+          */
+
+        if(emphasizedMovies.length > 0){
+            computedReviews = computedReviews.filter(r => emphasizedMovies.includes( r.googleID));
+        }
 
         if(sorting.field){
 
@@ -425,12 +388,14 @@ const SingleCritic = () => {
 
         return computedReviews;
 
-    }, [data.reviews, sorting, compset, headers]);
+    }, [data.reviews, sorting, compset, headers, emphasizedMovies]);
 
 
 
     /*
-     * myArray.map(function(e) { return e.hello; }).indexOf('stevie');
+     * Valitaan vertailuun mukaan otettava kriitikko
+     * - haetaan tarvittavat tiedot palvelimelta, mikäli niitä ei ole jo aiemmassa
+     *   vaiheessa tallennettu
      */
     const selectCompHandler = (val) => {
 
@@ -439,7 +404,7 @@ const SingleCritic = () => {
             .indexOf(val);
 
         // Löytyykö entuudestaan
-        if(x !== 0) {
+        if(x < 0) {
             fetchCompData(val)
         }
         else {
@@ -450,7 +415,18 @@ const SingleCritic = () => {
                 ...data,
                 reviewerWithShardItems: getUpdatedCompList(val)
             })
+
+            setEmphasizedMovies([])
         }
+        
+    }
+
+    /*
+     * Suodatetaan elokuvien luettelo vastaamaan donitsilla suoritettua valintaa
+     */
+    const emphasizeSelectedMovies = (d) => {
+
+        setEmphasizedMovies(d)
     }
 
     /*
@@ -497,8 +473,10 @@ const SingleCritic = () => {
                     </Col>
     
                     <Col xs={4} className="tahtisade-singleCritic-col">
-                        <BarChart 
-                            data={bcData}
+
+                        <ReusableD3Donut
+                            data = {getShares}
+                            handler = {emphasizeSelectedMovies}
                         />
 
                     </Col>
@@ -512,16 +490,6 @@ const SingleCritic = () => {
 
     /*
      * 
-                         <Donut 
-                            osuudet = {foobar}
-                        />
-
-     
-     Arvostelut sisältävän taulukon lajittelu
-
-
-
-     const [sorting, setSorting] = useState({field: "", order: ""})
      */
     const tableSortingHandler = (field, order) => {
         setSorting({field, order});

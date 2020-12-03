@@ -1,15 +1,8 @@
-.D3-donut-svg {border: 1px solid red;}
+.D3-donut-svg, .reusable-donut{border: 1px solid red;}
 			
-/*Styling for the lines connecting the labels to the slices*/
-polyline{
-    opacity: .3;
-    stroke: black;
-    stroke-width: 2px;
-    fill: none;
-}
-
 /* Make the percentage on the text labels bold*/
-.labelName tspan {
+.toolCircle tspan {
+    font-size: 3em;
     font-style: normal;
     font-weight: 700;
 }
@@ -18,4 +11,21 @@ polyline{
 .labelName {
     font-size: 0.9em;
     font-style: italic;
+}
+
+.sector {
+    stroke: black;
+    stroke-width: 5;
+}
+
+.opacityPlus {
+    fill-opacity: 1.0
+}
+
+.opacityNeutral {
+    fill-opacity: 0.6
+}
+
+.opacityMinus {
+    fill-opacity: 0.2
 }
