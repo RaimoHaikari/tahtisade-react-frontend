@@ -1,4 +1,8 @@
-.D3-donut-svg, .reusable-donut{border: 1px solid red;}
+.D3-donut-svg, .reusable-donut{
+    /*
+    border: 1px solid red;
+    */
+}
 			
 /* Make the percentage on the text labels bold*/
 .toolCircle tspan {
@@ -27,5 +31,5 @@
 }
 
 .opacityMinus {
-    fill-opacity: 0.2
+    fill-opacity: 0.1
 }

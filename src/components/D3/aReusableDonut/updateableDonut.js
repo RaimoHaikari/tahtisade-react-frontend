@@ -12,6 +12,7 @@ export const updateableDonutChart = () => {
 
     // All options that should be accessible to caller
     let data = []
+    let itemsTotal = 0;
     let width = 500;
     let height = 500;
     let margin = {top: 10, right: 10, bottom: 10, left: 10}
@@ -52,6 +53,9 @@ export const updateableDonutChart = () => {
      */
     let svg;
     let path;
+    let tooltipCircle;
+    let tooltipCircleDefaultColor = '#ececec';
+    let tooltipText;
 
 
     /*
@@ -70,7 +74,8 @@ export const updateableDonutChart = () => {
      * Yhteys ulkomaailmaan
      * - onko joku ryhmä aktivoitu hiirellä
      */
-    let emphasizedSector = null;
+    let emphasizedActive = null;
+    let emphasizedHoverd = null;
     let callBack;
 
     /*
@@ -86,6 +91,15 @@ export const updateableDonutChart = () => {
         return function(t) { 
             return arc(i(t)); 
         };
+    }
+
+    function centerTooltipText() {
+
+        let textBB = tooltipText.node().getBBox();
+        let centerY = textBB.y + (textBB.height / 2);
+
+        tooltipText.attr('y', -centerY);
+
     }
 
     function findNeighborArc(i, data0, data1, key) {
@@ -122,6 +136,13 @@ export const updateableDonutChart = () => {
     }
 
     /*
+        * @param: obj klikattua sektoria vastaava data
+        */
+    function kesken (obj) {
+
+    }
+
+    /*
      * Donitsin keskellä esitettävän Tooltip:in aktivointi ja esittäminen.
      * - aktivointi tapahtuu viemällä hiiri jonkin kolmesta sektorista ylle
      */
@@ -130,27 +151,30 @@ export const updateableDonutChart = () => {
         // add tooltip (svg circle element) when mouse enters label or slice
         selection.on('mouseenter', function (event, d) {
 
+            let val = []
+            val = d.data.ids
+
+            // Välitetään react-komponenttiin tieto
+            callBack(val)
+
+
             d3.selectAll('.slices path').each(
                 function(obj){
                     d3
                         .select(this)
-                        .classed(obj.index === d.index?"opacityPlus":"opacityMinus", true)
+                        .classed("opacityPlus", obj.index === d.index)
                         .classed("opacityNeutral", false)
+                        .classed("opacityMinus", obj.index !== d.index)
                 }
             ) 
-            
-            svg.append('text')
-                .attr('class', 'toolCircle')
-                .attr('dy', -15) // hard-coded. can adjust this to adjust text vertical alignment in tooltip
-                .html(toolTipHTML(d)) // add text to the circle.
-                .style('font-size', '.9em')
-                .style('text-anchor', 'middle'); // centres text in tooltip
-        
-            svg.append('circle')
-                .attr('class', 'toolCircle')
-                .attr('r', radius * 0.55) // radius of tooltip circle
+
+            // Esillä olevien elokuvien lkm
+            tooltipText
+                .html(`<tspan x="0">${d.data.lkm}</tspan>`) // add text to the circle.
+
+            tooltipCircle
                 .style('fill', colour(d.data[category])) // colour based on category mouse is over
-                .style('fill-opacity', 0.35);
+                
                 
         });
 
@@ -159,48 +183,107 @@ export const updateableDonutChart = () => {
          */
         selection.on('mouseout', function (event, d) {
 
+            // - elokuvalistan päivitys
+            if(emphasizedActive === null) { // Valitaan uusi
+                callBack([])
+            } else {
+                callBack(emphasizedActive.ids)
+            }
+
+            // - donitsin sektorien väritys
             d3.selectAll('.slices path').each(
                 function(obj){
+
                     d3
                         .select(this)
-                        .classed("opacityPlus", false)
-                        .classed("opacityMinus", false)
-                        //.classed(obj.index === d.index?"opacityPlus":"opacityMinus", true)
-                        .classed("opacityNeutral", true)
+                        .classed("opacityPlus", obj => {
+
+                            if(emphasizedActive === null)
+                                return false
+                            else 
+                                return obj.data.val === emphasizedActive.val
+                        
+                                
+                        })
+                        .classed("opacityNeutral", obj => {
+
+                            if(emphasizedActive === null)
+                                return true
+                            else
+                                return obj.data.val !== emphasizedActive.val
+
+                        })
+                        .classed("opacityMinus",obj => {
+
+                            if(emphasizedActive === null)
+                                return false
+                            else 
+                                return obj.data.val !== emphasizedActive.val      
+
+                        })
                 }
             ) 
 
-            d3.selectAll('.toolCircle').remove();
+            // esillä olevien elokuvien lkm
+            tooltipText
+                .html(toolTipHTML(emphasizedActive !== null?emphasizedActive.lkm:itemsTotal)) 
+
+            tooltipCircle
+                .style('fill', emphasizedActive !== null?colour(emphasizedActive[category]):tooltipCircleDefaultColor)
+
 
 
         });
 
+        /*
+         * Mikäli:
+         * - mikään sektori ei ole valittu, valitaan se
+         * - mikäli klikattiin eri sekroria, päivitetään valinta
+         * - mikäli klikattiin "alkuperäistä sektoria", vapautetaan valinta
+         */
         selection.on('click', (event, d) => {
 
             let val = []
 
-            if(emphasizedSector === null) {
-                emphasizedSector = d.data
+
+            if(emphasizedActive === null) { // Valitaan uusi
+                emphasizedActive = d.data
                 val = d.data.ids
+            } else if (d.data.val !== emphasizedActive.val){ // Päivitetään valinta
+                emphasizedActive = d.data
+                val = d.data.ids
+
             } else {
-                emphasizedSector = null
+                emphasizedActive = null
             }
+
+
+            d3.selectAll('.slices path').each(
+                function(obj){
+                    d3
+                        .select(this)
+                        .classed("opacityPlus", obj.index === d.index)
+                        .classed("opacityNeutral", false)
+                        .classed("opacityMinus",obj.index !== d.index)
+                }
+            ) 
 
             // Välitetään react-komponenttiin tieto
             callBack(val)
         })
+
+
+
+
     }
 
 
     /*
      * Donitsin keskellä sijaitsevan palleron teksti
      */
-    function toolTipHTML(data) {
+    function toolTipHTML(val) {
 
-        let tip = `
-            <tspan x="0">${data.data.val}</tspan>
-            <tspan x="0" dy="1em">${data.data.lkm}</tspan>
-        `
+        let tip = `<tspan x="0">${val}</tspan>`
 
         return tip;
     }
@@ -211,6 +294,8 @@ export const updateableDonutChart = () => {
     function chart(selection){
 
         selection.each(function (){
+
+            itemsTotal = data.reduce((a, b) => +a + +b.lkm, 0)
 
             radius = Math.min(width, height) / 2;
 
@@ -275,6 +360,24 @@ export const updateableDonutChart = () => {
                     .attr('class','opacityNeutral')
                     .attr('d', arc)
 
+            // - keskelle elokuvien määrän kertova pallero
+            tooltipText = svg.append('text')
+                .attr('class', 'toolCircle')
+                //.attr('dy', -15) // hard-coded. can adjust this to adjust text vertical alignment in tooltip
+                .html(toolTipHTML(itemsTotal)) // add text to the circle.
+                .style('font-size', itemsTotal>99?'2em':'2.6em')
+                .style('text-anchor', 'middle'); // centres text in tooltip
+            
+            tooltipCircle = svg.append('circle')
+                .attr("id","uDTTCircle")
+                .attr('class', 'toolCircle')
+                .attr('r', radius * 0.55) // radius of tooltip circle
+                .style('fill', tooltipCircleDefaultColor) // colour based on category mouse is over
+                .style('fill-opacity', 0.35);
+
+
+            centerTooltipText()
+
             /*
              * Kytketään donitsin osiin tapahtumat:
              * - hover, click
@@ -296,12 +399,14 @@ export const updateableDonutChart = () => {
 
                 console.log("P Ä I V I T E T Ä Ä N")
 
+                itemsTotal = data.reduce((a, b) => +a + +b.lkm, 0)
+
                 let updatePath = d3.select('.slices').selectAll('path')
 
                 /*
                  * Nollataan mahdollinen ryhmän aktivointi
                  */
-                emphasizedSector = null
+                emphasizedActive = null
                 /*
                  * Luetaan muuttujiin vallitseva ja tuleva tilanne.
                  * - uuden aineiston objekteihin liitetään mukaan objektien
@@ -342,9 +447,17 @@ export const updateableDonutChart = () => {
 
                 // animates the transition from old angle to new angle for slices/lines/labels
                 updatePath
+                        .attr('class','opacityNeutral')
                     .transition()
                     .duration(transTime)
                         .attrTween('d', arcTween)
+
+                // esillä olevien elokuvien lkm
+                tooltipText
+                    .html(toolTipHTML(itemsTotal)) 
+
+                tooltipCircle
+                    .style('fill', tooltipCircleDefaultColor)
 
             }
 

@@ -181,6 +181,7 @@ class ReusableD3Donut {
     updateData = (updatedData) => {
 
         console.log("............... updateData  ..................")
+        
         const {aPie, anArc, arcTween, colour, findNeighborArc, key, path} = this;
         const {category, transTime} = this.props;
 

@@ -5,3 +5,23 @@
 .dataTable-active-sorting-field {
     color: red;
 }
+
+.bg-A {
+    background-color: rgb(209, 225, 240);
+}
+
+.bg-B {
+    background-color: rgb(81, 201, 25);
+}
+
+.bg-C {
+    background-color: rgb(196, 103, 41);
+}
+
+.bg-A2 {
+    background-color: rgb(77, 18, 187);
+}
+
+.bg-B2 {
+    background-color: rgb(150, 200, 230);
+}

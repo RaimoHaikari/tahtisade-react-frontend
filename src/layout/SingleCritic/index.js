@@ -397,7 +397,7 @@ const SingleCritic = () => {
      * - haetaan tarvittavat tiedot palvelimelta, mikäli niitä ei ole jo aiemmassa
      *   vaiheessa tallennettu
      */
-    const selectCompHandler = (val) => {
+    const selectCompHandler = (val=defaultCompsetId) => {
 
         let x = compset
             .map(c => c.id)
@@ -425,12 +425,13 @@ const SingleCritic = () => {
      * Suodatetaan elokuvien luettelo vastaamaan donitsilla suoritettua valintaa
      */
     const emphasizeSelectedMovies = (d) => {
-
         setEmphasizedMovies(d)
     }
 
     /*
      * Valitaan tilan mukaan mitä tulostetaan.
+
+
      */
     const switchLayout = () => {
 
@@ -455,11 +456,12 @@ const SingleCritic = () => {
 
                 <Row className="tahtisade-singleCritic-row">
 
-                    <Col xs={2} className="tahtisade-singleCritic-col">
+                    <Col lg={2} className="tahtisade-singleCritic-col">
                         <SettingsHolder>
                             <ComparisonList 
                                 clickHandler = {selectCompHandler}
                                 data = {data.reviewerWithShardItems}
+                                compSelected = {activeCompId!==defaultCompsetId}
                             />
                         </SettingsHolder>
                     </Col>
@@ -472,7 +474,7 @@ const SingleCritic = () => {
                         />
                     </Col>
     
-                    <Col xs={4} className="tahtisade-singleCritic-col">
+                    <Col md={2} className="tahtisade-singleCritic-col">
 
                         <ReusableD3Donut
                             data = {getShares}
@@ -500,7 +502,7 @@ const SingleCritic = () => {
     }, [])
 
     return (
-        <Container className="tahtisade-singleCritic-container">
+        <Container fluid className="tahtisade-singleCritic-container">
             {switchLayout()}
             {loader}
         </Container>

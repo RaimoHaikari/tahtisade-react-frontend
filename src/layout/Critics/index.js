@@ -167,41 +167,38 @@ const Critics = () => {
      */
     return (
 
-        <Container fluid>
+        <Container fluid> 
             
             <Row>
-                <Col xs={2}></Col>
+                <Col md={4} lg={3} xl={2} className="d-none d-md-block"></Col>
+
                 <Col>
 
-                    <Row>
+                    <Pagination 
+                        total={totalItems}
+                        itemsPerPage={ITEMS_PER_PAGE}
+                        currentPage={currentPage}
+                        onPageChange={page => setCurrentPage(page)}
+                    />
 
-                        <Col>
-                            <Pagination 
-                                total={totalItems}
-                                itemsPerPage={ITEMS_PER_PAGE}
-                                currentPage={currentPage}
-                                onPageChange={page => setCurrentPage(page)}
-                            />
-                        </Col>
-
-                        <Col>
-                            <Search 
-                                onSearch={(value) => {
-                                    setSearch(value)
-                                    setCurrentPage(1)
-                                }}
-                            />
-                        </Col>
-
-
-                    </Row>
-                
                 </Col>
+
+                <Col sm={6} md={4} lg={4} xl={3}>
+
+                    <Search 
+                        onSearch={(value) => {
+                            setSearch(value)
+                            setCurrentPage(1)
+                        }}
+                    />
+
+                </Col>
+
             </Row>
             
             <Row>
 
-                <Col xs={2}>
+                <Col md={4} lg={3} xl={2}>
                     <SettingsHolder>
                         <Settings
                             min = {1}

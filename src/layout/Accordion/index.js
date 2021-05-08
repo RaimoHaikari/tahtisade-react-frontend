@@ -45,7 +45,7 @@ const SettingsHolder = (props) => {
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>
-        </Accordion>       
+        </Accordion>    
     );
 }
 

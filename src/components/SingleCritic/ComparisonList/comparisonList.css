@@ -1,3 +1,20 @@
+.tahtisade-criticPage-scrollableList {
+  height:500px;
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+/* 
+ * Hakukenttään syötettyä tekstiä vastaavan osuuden korostus osuman saaneiden
+ * kriitikkjen nimessä
+ */
+.tahtisade-criticPage-String-Emph {
+    text-decoration: underline;
+}
+
+/*
+ * Kriitikkojen nimilista
+ */
 .tahtisade-criticPage-list-group-item {
     padding: .25rem 0.5rem!important;
     cursor: pointer
